@@ -4,7 +4,16 @@ const app        = express()
 const mysql      = require("mysql")
 const fs         = require("fs")
 const bodyParser = require("body-parser")
+const crypto     = require('crypto');
 
+function generateSecureId(length = 16) {
+  if (length <= 0 || typeof length !== 'number') {
+    throw new Error('Invalid length for secure ID');
+  }
+
+  const bytes = crypto.randomBytes(Math.ceil(length / 2));
+  return bytes.toString('hex').slice(0, length);
+}
 app.set("view engine", "pug")
 app.use(express.static("views"))
 app.use(bodyParser.json());
@@ -19,6 +28,7 @@ let con = mysql.createConnection({
 con.connect(function (err) {
     if (err) throw err;
     console.log("Connected!");
+    con.query("USE SAL;");
 });
 
 
@@ -29,7 +39,7 @@ app.post("/add", add_user)
 app.listen(8080)
 
 function home(req, res) {
-    con.query("SHOW DATABASES", (e, r) => {
+    con.query("SELECT * FROM profile;", (e, r) => {
         console.log(r, e);
         res.render("index")
     })
@@ -38,7 +48,13 @@ function home(req, res) {
 function add_user(req, res) {
 
     if (req.method == "POST") {
-        log(req.body)
+        let body = req.body
+        let unid = generateSecureId(32)
+        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}');`
+        log(sql)
+        con.query(sql,(e,r)=>{
+            log(e,r)
+        })
     }
 
     res.render("add")
