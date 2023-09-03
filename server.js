@@ -42,8 +42,8 @@ function home(req, res) {
     con.query("SELECT * FROM profile;", (e, r) => {
         console.log(r, e);
         res.render("index")
-    })
-}
+    }) 
+} 
 
 function add_user(req, res) {
 
