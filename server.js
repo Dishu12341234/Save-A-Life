@@ -2,7 +2,7 @@ const { log }    = require("console")
 const express    = require("express")
 const app        = express()
 const mysql      = require("mysql")
-const fs         = require("fs")
+const fs         = require("fs")    
 const bodyParser = require("body-parser")
 const crypto     = require('crypto');
 
@@ -35,6 +35,10 @@ con.connect(function (err) {
 app.get("/", home)
 app.get("/add_user", add_user)
 app.post("/add", add_user)
+app.get("/donate", donate)
+app.post("/donate", donate)
+app.get("/patient", patient)
+app.post("/patient", patient)
 
 app.listen(8080)
 
@@ -59,3 +63,30 @@ function add_user(req, res) {
 
     res.render("add")
 }   
+
+function donate(req,res)
+{
+    if(req.method == "POST")
+    {
+        body = req.body
+        sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+        con.query(sql,(e,r)=>{
+            log(e,r)
+        })
+    }
+    res.render("donate")
+}
+
+
+function patient(req,res)
+{
+    if(req.method == "POST")
+    {
+        body = req.body
+        sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+        con.query(sql,(e,r)=>{
+            log(e,r)
+        })
+    }
+    res.render("patient")
+}

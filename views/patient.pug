@@ -1,0 +1,48 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Donate | Save A Life
+        link(rel="stylesheet", href="patient.css")
+        script(src="donate.js",defer) 
+    body 
+     .navbar 
+            ul 
+                li
+                    a(href="/", target="", rel="noopener noreferrer") home
+                li
+                    a(href="/add_user", target="", rel="noopener noreferrer") add User
+                li
+                    a(href="/donate", target="", rel="noopener noreferrer") donate
+                li
+                    a(href="/patient", target="", rel="noopener noreferrer") patient
+    form(action="/patient", method="post") 
+            input(type="text", name="UNID",placeholder="Enter your UNID" ,required)
+            br
+            select(name="blood_group")  
+                option(value="AB+")
+                    p   AB+
+                option(value="AB-")
+                    p   AB-
+                option(value="B+")
+                    p   B+
+                option(value="B-")
+                    p   B-
+                option(value="A+")
+                    p   A+
+                option(value="A-")
+                    p   A-
+                option(value="O+")
+                    p   O+
+                option(value="O-",selecte)
+                    p   O-
+                option(value="RH-NULL")  
+                    p   RH-NULL
+            select(name="age",id="age") 
+            select(name="gender")
+                option(value="male")
+                   p    male
+                option(value="female")
+                   p    female
+            input(type="submit", value="submit")

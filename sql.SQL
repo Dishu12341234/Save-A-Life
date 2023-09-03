@@ -1,15 +1,16 @@
 -- Active: 1693716310421@@127.0.0.1@3306
 
 USE SAL;
-CREATE TABLE donor
+CREATE TABLE patient
 (   
-    name VARCHAR(40),
-    city VARCHAR(30),
-    contact VARCHAR(12),
     UNID VARCHAR(32),
-
+    Blood_group varchar(20), 
+    Age int,
+    gender varchar(20)
 );
 
-DROP TABLE donor;
+DROP TABLE patient;
 
-SELECT * FROM donor
+SELECT * FROM patient
+
+SELECT * FROM patient;
