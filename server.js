@@ -14,6 +14,9 @@ function generateSecureId(length = 16) {
   const bytes = crypto.randomBytes(Math.ceil(length / 2));
   return bytes.toString('hex').slice(0, length);
 }
+
+//hello
+
 app.set("view engine", "pug")
 app.use(express.static("views"))
 app.use(bodyParser.json());
