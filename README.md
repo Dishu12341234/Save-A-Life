@@ -12,3 +12,5 @@ install node js and do the following:
 5) npm install pug
 6) npm run test
 now go to "http://localhost:8080" 
+
+//mysqldump -u root -p --databases sakila employees > C:\MySQLBackup\sakila_employees_20200424.sq
