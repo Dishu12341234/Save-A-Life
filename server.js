@@ -39,9 +39,10 @@ app.get("/", home)
 app.get("/add_user", add_user)
 app.post("/add", add_user)
 app.get("/donate", donate)
-app.post("/donate", donate)
+app.post("/donate", donate) 
 app.get("/patient", patient)
 app.post("/patient", patient)
+
 
 app.listen(8080)
 
@@ -52,8 +53,8 @@ function home(req, res) {
     }) 
 } 
 
-function add_user(req, res) {
 
+function add_user(req, res) {
     if (req.method == "POST") {
         let body = req.body
         let unid = generateSecureId(32)
