@@ -21,4 +21,5 @@ SELECT * FROM donor;
 SELECT * FROM profile;
 
 DELETE FROM `donor` ;
+DELETE FROM `patient` ;
 DELETE FROM `profile` ;

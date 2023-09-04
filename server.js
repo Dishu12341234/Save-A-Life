@@ -43,11 +43,26 @@ app.get("/patient", patient)
 app.post("/patient", patient)
 app.get("/singout", singout)
 app.get("/login", login)
+app.get("/fetch", fetch)
 
 app.listen(8080)
 
+function fetch(req,res)
+{
+    con.query("SELECT * FROM patient",(e,r)=>{
+        if(e)
+        return;
+        log(r)
+        res.json(r)
+        
+    });
+}
+
 function login(req,res)
 {
+
+    let token = jwt.sign({ login: 'true' }, generateSecureId());
+    res.cookie('login',token,{expire:Date.now()+216000000}) //2.5 days
     res.render("login")
 }
 
@@ -72,12 +87,7 @@ function add_user(req, res) {
         log(sql)
         con.query(sql,(e,r)=>{
             log(e,r)
-            if(!e)
-            {
-                var token = jwt.sign({ login: 'true' }, generateSecureId());
-                res.cookie('login',token,{expire:Date.now()+216000000}) //2.5 days
-                res.render("add")
-            }
+            res.render("login")
         })
     }
     else
