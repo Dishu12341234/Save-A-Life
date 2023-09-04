@@ -14,3 +14,8 @@ DROP TABLE patient;
 SELECT * FROM patient
 
 SELECT * FROM patient;
+
+show tables;
+SELECT * FROM donor;
+
+DELETE FROM `donor` ;
