@@ -41,8 +41,14 @@ app.get("/donate", donate)
 app.post("/donate", donate) 
 app.get("/patient", patient)
 app.post("/patient", patient)
+app.get("/logout", logout)
 
 app.listen(8080)
+
+function logout(req,res)
+{
+    res.render("logout")
+}
 
 function home(req, res) {
     con.query("SELECT * FROM profile;", (e, r) => {
@@ -55,14 +61,13 @@ function add_user(req, res) {
     if (req.method == "POST") {
         let body = req.body
         let unid = generateSecureId(32)
-        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}');`
+        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false');`
         log(sql)
         con.query(sql,(e,r)=>{
             log(e,r)
             if(!e)
             {
-                var token = jwt.sign({ login: 'true' }, generateSecureId(),{expiresIn:10});
-                res.cookie("login",token)
+                var token = jwt.sign({ login: 'true' }, generateSecureId());
                 res.render("add")
             }
         })
@@ -101,6 +106,15 @@ function patient(req,res)
 {
     if(req.method == "POST")
     {
+        let login_;
+        try {
+            login_ = jwt.decode(req.cookies.login)['login']
+        } catch (error) {
+            if(error.message == "Cannot read properties of null (reading 'login')")
+            {
+                res.redirect('/add_user')
+            }
+        }
         body = req.body
         sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
         con.query(sql,(e,r)=>{

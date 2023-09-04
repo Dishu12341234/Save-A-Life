@@ -17,6 +17,8 @@ html(lang="en")
                         a(href="/donate", target="", rel="noopener noreferrer") Donate
                     li
                         a(href="/patient", target="", rel="noopener noreferrer") patient
+                    li
+                        a(href="/logout", target="", rel="noopener noreferrer") logout
         form(action="/add", method="post") 
             <select onchange="print_city('state', this.selectedIndex);" id="sts" name ="stt" class="form-control" required></select>
             <select id ="state" class="form-control" name = "city"required></select>

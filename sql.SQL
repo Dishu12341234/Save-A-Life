@@ -17,5 +17,7 @@ SELECT * FROM patient;
 
 show tables;
 SELECT * FROM donor;
+SELECT * FROM profile;
 
 DELETE FROM `donor` ;
+DELETE FROM `profile` ;
