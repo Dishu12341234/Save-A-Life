@@ -11,7 +11,8 @@ CREATE TABLE patient
 
 DROP TABLE patient;
 
-SELECT * FROM patient
+SELECT * FROM patient;
+SELECT * FROM profile;
 
 SELECT * FROM patient;
 

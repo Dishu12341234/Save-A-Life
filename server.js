@@ -41,13 +41,20 @@ app.get("/donate", donate)
 app.post("/donate", donate) 
 app.get("/patient", patient)
 app.post("/patient", patient)
-app.get("/logout", logout)
+app.get("/singout", singout)
+app.get("/login", login)
 
 app.listen(8080)
 
-function logout(req,res)
+function login(req,res)
 {
-    res.render("logout")
+    res.render("login")
+}
+
+function singout(req,res)
+{
+    res.clearCookie('login')
+    res.render("singout")
 }
 
 function home(req, res) {
@@ -68,6 +75,7 @@ function add_user(req, res) {
             if(!e)
             {
                 var token = jwt.sign({ login: 'true' }, generateSecureId());
+                res.cookie('login',token,{expire:Date.now()+216000000}) //2.5 days
                 res.render("add")
             }
         })

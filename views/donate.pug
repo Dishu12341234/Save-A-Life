@@ -12,13 +12,15 @@ html(lang="en")
                 li
                     a(href="/", target="", rel="noopener noreferrer") home
                 li
-                    a(href="/add_user", target="", rel="noopener noreferrer") add User
+                    a(href="/add_user", target="", rel="noopener noreferrer") sing in
                 li
                     a(href="/donate", target="", rel="noopener noreferrer") donate
                 li
                     a(href="/patient", target="", rel="noopener noreferrer") patient
                 li
-                    a(href="/logout", target="", rel="noopener noreferrer") logout
+                    a(href="/singout", target="", rel="noopener noreferrer") sing out
+                li
+                        a(href="/login", target="", rel="noopener noreferrer") login
     form(action="/donate", method="post") 
             input(type="text", name="UNID",placeholder="Enter your UNID" ,required)
             br

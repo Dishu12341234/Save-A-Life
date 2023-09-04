@@ -12,13 +12,15 @@ html(lang="en")
                     li
                         a(href="/", target="", rel="noopener noreferrer") home
                     li
-                        a(href="/add_user", target="", rel="noopener noreferrer") add User
+                        a(href="/add_user", target="", rel="noopener noreferrer") sing in
                     li
                         a(href="/donate", target="", rel="noopener noreferrer") Donate
                     li
                         a(href="/patient", target="", rel="noopener noreferrer") patient
                     li
-                        a(href="/logout", target="", rel="noopener noreferrer") logout
+                        a(href="/singout", target="", rel="noopener noreferrer") sing out
+                    li
+                        a(href="/login", target="", rel="noopener noreferrer") login
         form(action="/add", method="post") 
             <select onchange="print_city('state', this.selectedIndex);" id="sts" name ="stt" class="form-control" required></select>
             <select id ="state" class="form-control" name = "city"required></select>
