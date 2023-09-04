@@ -88,5 +88,5 @@ function patient(req,res)
             log(e,r)
         })
     }
-    res.render("patient")//pp
+    res.render("patient")//ppo
 }
