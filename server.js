@@ -95,7 +95,7 @@ function login(req,res)
             </head>
             <body>
             <h1>Save A Life | Verification</h1>
-            <button onclick="window.location.href = ${req.url}/t?token=${token}&UNID=${UNID}">Hello</button>
+            <button onclick="window.location.href = ${req.url}/t?token=${token}&UNID=${UNID}">Verify</button>
             </body>
             </html>`
         };
