@@ -76,10 +76,10 @@ function login(req,res)
 {   
     if(req.method == "POST")
     {   
-        let UNID = req.body.UNID
+        let host  = (req.rawHeaders[1])
+        let UNID  = req.body.UNID
         let email = req.body.email
         let token = jwt.sign({ login: 'true',ekey:"somthing", key: generateSecureId() }, generateSecureId(128));
-        
         
         const mailOptions = {
             from: 'divyuzzzzzz@gmail.com',
@@ -95,7 +95,7 @@ function login(req,res)
             </head>
             <body>
             <h1>Save A Life | Verification</h1>
-            <button onclick="window.location.href = ${req.url}/t?token=${token}&UNID=${UNID}">Verify</button>
+            <a href = 'http://${host}/t?token=${token}&UNID=${UNID}'">Verify</a>
             </body>
             </html>`
         };
@@ -156,13 +156,13 @@ function donate(req,res)
                 res.redirect('/login')
             }
         }
-
+        
         // return;
         body = req.body
         sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
         con.query(sql,(e,r)=>{
             log(e,r)
-
+            
         })
     }
     res.render("donate")
