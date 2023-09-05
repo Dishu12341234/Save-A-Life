@@ -85,7 +85,7 @@ function login(req,res)
             from: 'divyuzzzzzz@gmail.com',
             to: `${email}`,
             subject: 'Verificatiion',
-            text: ` 
+            html: ` 
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -95,7 +95,7 @@ function login(req,res)
             </head>
             <body>
             <h1>Save A Life | Verification</h1>
-            <button onclick="window.location.href = ${req.url}/t?token=${token}&UNID=${UNID}"></button>
+            <button onclick="window.location.href = ${req.url}/t?token=${token}&UNID=${UNID}">Hello</button>
             </body>
             </html>`
         };
