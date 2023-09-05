@@ -95,7 +95,7 @@ function login(req,res)
             </head>
             <body>
             <h1>Save A Life | Verification</h1>
-            <a href = 'http://${host}/t?token=${token}&UNID=${UNID}'">Verify</a>
+            <a href = 'http://${host}/t?token=${token}&UNID=${UNID}'>Verify</a>
             </body>
             </html>`
         };
