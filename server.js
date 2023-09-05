@@ -1,12 +1,14 @@
 const fs                = require("fs")    
+const jwt               = require('jsonwebtoken');
 const mysql             = require("mysql")
 const crypto            = require('crypto');
-const { log }           = require("console")
 const express           = require("express")
-const bodyParser        = require("body-parser")
-const jwt               = require('jsonwebtoken');
-const cookieParser      = require("cookie-parser")
+const { log }           = require("console")
 const nodemailer        = require('nodemailer');
+const bodyParser        = require("body-parser")
+const cookieParser      = require("cookie-parser")
+const XMLHttpRequest    = require('xhr2')
+ 
 
 const app = express()
 
@@ -18,14 +20,6 @@ function generateSecureId(length = 16) {
     const bytes = crypto.randomBytes(Math.ceil(length / 2));
     return bytes.toString('hex').slice(0, length);
 }
-
-let mailTransporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'divyuzzzzzz@gmail.com',
-        pass: 'divyansh@google'
-    }
-});
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -45,16 +39,16 @@ con.connect(function (err) {
 });
 
 app.get("/", home)
-app.get("/add_user", add_user)
+app.get("/fetch", fetch)
+app.get("/login", login)
+app.post("/login", login)
 app.post("/add", add_user)
 app.get("/donate", donate)
 app.post("/donate", donate) 
+app.get("/singout", singout)
 app.get("/patient", patient)
 app.post("/patient", patient)
-app.get("/singout", singout)
-app.get("/login", login)
-app.post("/login", login)
-app.get("/fetch", fetch)
+app.get("/add_user", add_user)
 
 app.listen(8080)
 
@@ -75,9 +69,12 @@ function login(req,res)
     {   
         destination_mail_addr = req.body.email
         UNID = req.body.UNID
+
         let token = jwt.sign({ login: 'true',ekey:"somthing" }, generateSecureId());
         res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
+
         token = generateSecureId(4);
+
         let mailDetails = {
             from: 'divyuzzzzzz@gmail.com',
             to: `${destination_mail_addr}`,
@@ -86,13 +83,20 @@ function login(req,res)
         };  
 
         log(mailDetails)
-        // mailTransporter.sendMail(mailDetails, function(err, data) {
-        //     if(err) {
-        //         console.log('Error Occurs');
-        //     } else {
-        //         console.log('Email sent successfully');
-        //     }
-        // });
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://smtp.gmail.com:587');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              console.log('Email sent successfully!');
+            } else {
+              console.error('Error sending email', xhr.statusText);
+            }
+          }
+        };
+      
+        xhr.send(JSON.stringify(mailDetails));
     }
 
     res.render("login")
@@ -136,7 +140,7 @@ function donate(req,res)
         } catch (error) {
             if(error.message == "Cannot read properties of null (reading 'login')")
             {
-                res.redirect('/add_user')
+                res.redirect('/login')
             }
         }
 
