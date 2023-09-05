@@ -107,7 +107,6 @@ function login(req,res)
             } else {
               console.log('Email sent: ' + info.response);
               verify_login(token)
-              // do something useful
             }
           });
   
