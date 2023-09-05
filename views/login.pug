@@ -21,4 +21,8 @@ html(lang="en")
                 li
                         a(href="/login", target="", rel="noopener noreferrer") login
         form(action="/login", method="post") 
-            input(type="text", name="UNID",placeholder="please enter your UNID to continue")
+            input(type="text", name="UNID",placeholder="please enter your UNID to continue",required)
+            br
+            input(type="text", name="email",placeholder="please enter your email to continue",required)
+            br
+            input(type="submit",value="submit")

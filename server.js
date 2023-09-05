@@ -6,6 +6,8 @@ const express           = require("express")
 const bodyParser        = require("body-parser")
 const jwt               = require('jsonwebtoken');
 const cookieParser      = require("cookie-parser")
+const nodemailer        = require('nodemailer');
+
 const app = express()
 
 function generateSecureId(length = 16) {
@@ -16,6 +18,14 @@ function generateSecureId(length = 16) {
     const bytes = crypto.randomBytes(Math.ceil(length / 2));
     return bytes.toString('hex').slice(0, length);
 }
+
+let mailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'divyuzzzzzz@gmail.com',
+        pass: 'divyansh@google'
+    }
+});
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -43,6 +53,7 @@ app.get("/patient", patient)
 app.post("/patient", patient)
 app.get("/singout", singout)
 app.get("/login", login)
+app.post("/login", login)
 app.get("/fetch", fetch)
 
 app.listen(8080)
@@ -59,10 +70,31 @@ function fetch(req,res)
 }
 
 function login(req,res)
-{
+{   
+    if(req.method == "POST")
+    {   
+        token = generateSecureId(4);
+        destination_mail_addr = req.body.email
+        UNID = req.body.UNID
+        let mailDetails = {
+            from: 'divyuzzzzzz@gmail.com',
+            to: `${destination_mail_addr}`,
+            subject: 'Login Confirmation',
+            text: `https://${req.url}/t?token=${token}&UNID=${UNID}`
+        };  
+
+        log(mailDetails)
+        // mailTransporter.sendMail(mailDetails, function(err, data) {
+        //     if(err) {
+        //         console.log('Error Occurs');
+        //     } else {
+        //         console.log('Email sent successfully');
+        //     }
+        // });
+    }
 
     let token = jwt.sign({ login: 'true' }, generateSecureId());
-    res.cookie('login',token,{expire:Date.now()+216000000}) //2.5 days
+    // res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
     res.render("login")
 }
 
