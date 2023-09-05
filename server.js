@@ -3,7 +3,7 @@ const jwt               = require('jsonwebtoken');
 const smtp              = require('smtp-protocol')
 const mysql             = require("mysql")
 const crypto            = require('crypto');
-const express           = require("express")
+const express           = require("express") 
 const { log }           = require("console")
 const nodemailer        = require('nodemailer');
 const bodyParser        = require("body-parser")
@@ -14,7 +14,7 @@ const app = express()
 
 function generateSecureId(length = 16) {
     if (length <= 0 || typeof length !== 'number') {
-        throw new Error('Invalid length for secure ID');
+        throw new Error('Invalid length for secure ID'); 
     }
     
     const bytes = crypto.randomBytes(Math.ceil(length / 2));

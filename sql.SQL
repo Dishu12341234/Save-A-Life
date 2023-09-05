@@ -7,7 +7,7 @@ CREATE TABLE patient
     Blood_group varchar(20), 
     Age int,
     gender varchar(20)
-);
+); 
 
 DROP TABLE patient;
 
