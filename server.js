@@ -21,6 +21,14 @@ function generateSecureId(length = 16) {
     return bytes.toString('hex').slice(0, length);
 }
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'divyuzzzzzz@gmail.com',
+      pass: 'shdigfnkkbxuupvf'
+    }
+});
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.set("view engine", "pug")
@@ -52,6 +60,7 @@ app.get("/add_user", add_user)
 
 app.listen(8080)
 
+
 function fetch(req,res)
 {
     con.query("SELECT * FROM patient",(e,r)=>{
@@ -67,10 +76,41 @@ function login(req,res)
 {   
     if(req.method == "POST")
     {   
-        UNID = req.body.UNID
-        let token = jwt.sign({ login: 'true',ekey:"somthing" }, generateSecureId());
-        res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
-        token = generateSecureId(4);
+        let UNID = req.body.UNID
+        let email = req.body.email
+        let token = jwt.sign({ login: 'true',ekey:"somthing", key: generateSecureId() }, generateSecureId(128));
+        
+        
+        const mailOptions = {
+            from: 'divyuzzzzzz@gmail.com',
+            to: `${email}`,
+            subject: 'Verificatiion',
+            text: ` 
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            </head>
+            <body>
+            <h1>Save A Life | Verification</h1>
+            <button onclick="window.location.href = ${req.url}/t?token=${token}&UNID=${UNID}"></button>
+            </body>
+            </html>`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+            res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
+            console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+              verify_login(token)
+              // do something useful
+            }
+          });
+  
     }
 
     res.render("login")
