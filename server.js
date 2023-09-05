@@ -1,5 +1,6 @@
 const fs                = require("fs")    
 const jwt               = require('jsonwebtoken');
+const smtp              = require('smtp-protocol')
 const mysql             = require("mysql")
 const crypto            = require('crypto');
 const express           = require("express")
@@ -7,7 +8,6 @@ const { log }           = require("console")
 const nodemailer        = require('nodemailer');
 const bodyParser        = require("body-parser")
 const cookieParser      = require("cookie-parser")
-const XMLHttpRequest    = require('xhr2')
  
 
 const app = express()
@@ -67,36 +67,10 @@ function login(req,res)
 {   
     if(req.method == "POST")
     {   
-        destination_mail_addr = req.body.email
         UNID = req.body.UNID
-
         let token = jwt.sign({ login: 'true',ekey:"somthing" }, generateSecureId());
         res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
-
         token = generateSecureId(4);
-
-        let mailDetails = {
-            from: 'divyuzzzzzz@gmail.com',
-            to: `${destination_mail_addr}`,
-            subject: 'Login Confirmation',
-            text: `https://${req.url}/t?token=${token}&UNID=${UNID}`
-        };  
-
-        log(mailDetails)
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://smtp.gmail.com:587');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-              console.log('Email sent successfully!');
-            } else {
-              console.error('Error sending email', xhr.statusText);
-            }
-          }
-        };
-      
-        xhr.send(JSON.stringify(mailDetails));
     }
 
     res.render("login")
