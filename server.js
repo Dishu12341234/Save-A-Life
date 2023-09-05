@@ -73,9 +73,11 @@ function login(req,res)
 {   
     if(req.method == "POST")
     {   
-        token = generateSecureId(4);
         destination_mail_addr = req.body.email
         UNID = req.body.UNID
+        let token = jwt.sign({ login: 'true',ekey:"somthing" }, generateSecureId());
+        res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
+        token = generateSecureId(4);
         let mailDetails = {
             from: 'divyuzzzzzz@gmail.com',
             to: `${destination_mail_addr}`,
@@ -93,8 +95,6 @@ function login(req,res)
         // });
     }
 
-    let token = jwt.sign({ login: 'true' }, generateSecureId());
-    // res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
     res.render("login")
 }
 
