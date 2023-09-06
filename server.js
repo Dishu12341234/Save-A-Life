@@ -8,7 +8,7 @@ const { log }           = require("console")
 const nodemailer        = require('nodemailer');
 const bodyParser        = require("body-parser")
 const cookieParser      = require("cookie-parser")
-const express_session   = require('express-session')
+const session           = require('express-session')
 
 const app = express()
 
@@ -34,6 +34,12 @@ app.use(bodyParser.json());
 app.set("view engine", "pug")
 app.use(express.static("views"))
 app.use(bodyParser.urlencoded({extended: true,}),);
+app.use(sessions({
+    secret:generateSecureId(64),
+    saveIuninitialized:true,
+    cookie : {maxAge:1000*60*60*3},
+    resave:false
+}))
 
 let con = mysql.createConnection({
     host: "localhost",
@@ -147,14 +153,6 @@ function donate(req,res)
 {
     if(req.method == "POST")
     {   
-        let login_;
-        try {
-            login_ = jwt.decode(req.cookies.login)['login']
-        } catch (error) {
-            if(error.message == "Cannot read properties of null (reading 'login')")
-            {
-                res.redirect('/login')
-            }
         }
         
         // return;
@@ -171,22 +169,10 @@ function donate(req,res)
 
 function patient(req,res)
 {
-    if(req.method == "POST")
-    {
-        let login_;
-        try {
-            login_ = jwt.decode(req.cookies.login)['login']
-        } catch (error) {
-            if(error.message == "Cannot read properties of null (reading 'login')")
-            {
-                res.redirect('/add_user')
-            }
-        }
-        body = req.body
-        sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
-        con.query(sql,(e,r)=>{
-            log(e,r)
-        })
-    }
+    body = req.body
+    sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+    con.query(sql,(e,r)=>{
+        log(e,r)
+    })
     res.render("patient")//ppo
 }
