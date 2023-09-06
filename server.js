@@ -17,7 +17,7 @@ function generateSecureId(length = 16) {
         throw new Error('Invalid length for secure ID'); 
     }
     
-    const bytes = crypto.randomBytes(Math.ceil(length / 2));
+    const bytes = crypto.randomBytes(Math.ceil(length / 2)); 
     return bytes.toString('hex').slice(0, length);
 }
 
