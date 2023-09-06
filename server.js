@@ -162,7 +162,6 @@ function donate(req,res)
             log(e,r)
             
         })
-    }
     res.render("donate")
 }
 
