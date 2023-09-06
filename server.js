@@ -38,7 +38,7 @@ app.use(session({secret:generateSecureId(64),saveIuninitialized:true,cookie : {m
 app.use(session
     ({
     secret:generateSecureId(64),
-    saveIuninitialized:true,
+    saveUnininitialized:true,
     cookie : {maxAge:1000*60*60*3},
     resave:false
 }))
@@ -66,7 +66,7 @@ app.get("/patient", patient)
 app.post("/patient", patient)
 app.get("/add_user", add_user)
 
-app.listen(8080)
+app.listen(2000)
 
 
 function fetch(req,res)
