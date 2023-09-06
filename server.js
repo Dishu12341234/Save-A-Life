@@ -190,5 +190,3 @@ function patient(req,res)
     }
     res.render("patient")//ppo
 }
-
-//hello
