@@ -34,14 +34,8 @@ app.use(bodyParser.json());
 app.set("view engine", "pug")
 app.use(express.static("views"))
 app.use(bodyParser.urlencoded({extended: true,}),);
-app.use(session({secret:generateSecureId(64),saveIuninitialized:true,cookie : {maxAge:1000*60*60*3},resave:false}))
-app.use(session
-    ({
-    secret:generateSecureId(64),
-    saveUnininitialized:true,
-    cookie : {maxAge:1000*60*60*3},
-    resave:false
-}))
+app.use(session({secret:generateSecureId(64),saveUninitialized:true,cookie : {maxAge:1000*60*60*3},resave:false}))
+
 
 let con = mysql.createConnection({
     host: "localhost",
@@ -113,8 +107,9 @@ function login(req,res)
             console.log(error);
             } else {
                 console.log('Email sent: ' + info.response);
-                req.session.UNID = UNID
-                req.session.token = token
+                req.session.UNID ={ 'UNID' : `${UNID}` }
+                // req.session.token = token
+                log(req.session)
             }
           });
   
