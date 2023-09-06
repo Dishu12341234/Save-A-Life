@@ -34,12 +34,7 @@ app.use(bodyParser.json());
 app.set("view engine", "pug")
 app.use(express.static("views"))
 app.use(bodyParser.urlencoded({extended: true,}),);
-app.use(sessions({
-    secret:generateSecureId(64),
-    saveIuninitialized:true,
-    cookie : {maxAge:1000*60*60*3},
-    resave:false
-}))
+app.use(session({secret:generateSecureId(64),saveIuninitialized:true,cookie : {maxAge:1000*60*60*3},resave:false}))
 
 let con = mysql.createConnection({
     host: "localhost",
@@ -85,7 +80,7 @@ function login(req,res)
         let host  = (req.rawHeaders[1])
         let UNID  = req.body.UNID
         let email = req.body.email
-        let token = jwt.sign({ login: 'true',ekey:"somthing", key: generateSecureId() }, generateSecureId(128));
+        let token = jwt.sign({ login: 'true', key: generateSecureId() }, generateSecureId(128));
         
         const mailOptions = {
             from: 'divyuzzzzzz@gmail.com',
@@ -108,11 +103,11 @@ function login(req,res)
         
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
-            res.cookie('login',token,{expire:Date.now()+864000000}) //10 days
             console.log(error);
             } else {
-              console.log('Email sent: ' + info.response);
-              verify_login(token)
+                console.log('Email sent: ' + info.response);
+                req.session.UNID = UNID
+                req.session.token = token
             }
           });
   
@@ -128,6 +123,7 @@ function singout(req,res)
 }
 
 function home(req, res) {
+    log(req.session)
     con.query("SELECT * FROM profile;", (e, r) => {
         console.log(r, e);
         res.render("index")
@@ -153,8 +149,8 @@ function donate(req,res)
 {
     if(req.method == "POST")
     {   
-        }
-        
+
+    }
         // return;
         body = req.body
         sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
