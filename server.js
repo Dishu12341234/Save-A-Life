@@ -34,7 +34,17 @@ app.use(bodyParser.json());
 app.set("view engine", "pug")
 app.use(express.static("views"))
 app.use(bodyParser.urlencoded({extended: true,}),);
+<<<<<<< HEAD
 app.use(session({secret:generateSecureId(64),saveIuninitialized:true,cookie : {maxAge:1000*60*60*3},resave:false}))
+=======
+app.use(session
+    ({
+    secret:generateSecureId(64),
+    saveIuninitialized:true,
+    cookie : {maxAge:1000*60*60*3},
+    resave:false
+}))
+>>>>>>> 2753e6cc6cc08618c0d790b8080a1cfde32e8a98
 
 let con = mysql.createConnection({
     host: "localhost",
