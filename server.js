@@ -4,12 +4,14 @@ const smtp              = require('smtp-protocol')
 const mysql             = require("mysql")
 const crypto            = require('crypto');
 const express           = require("express") 
+const session           = require('express-session')
 const { log }           = require("console")
 const nodemailer        = require('nodemailer');
 const bodyParser        = require("body-parser")
-const cookieParser      = require("cookie-parser")
-const session           = require('express-session')
+const cookieParser      = require("cookie-parser")  
+const storage           = require('node-localstorage')
 
+const localStorage = new storage.LocalStorage('./scratch')
 const app = express()
 
 //Genertaing A random Key
@@ -51,6 +53,12 @@ con.connect(function (err) {
     con.query("USE SAL;");
 });
 
+//getting the UNID from the local storage if it exists
+function getUNIDFromLocalStorage()
+{
+    return localStorage.getItem('UNID')
+}
+
 //End Points
 app.get("/", home)
 app.get("/fetch", fetch)
@@ -63,9 +71,23 @@ app.get("/singout", singout)
 app.get("/patient", patient)
 app.post("/patient", patient)
 app.get("/add_user", add_user)
+app.get('/t',verify)
 
 //Listner
 app.listen(2000)
+
+function verify(req,res) {
+    if(req.query.token === req.cookies.token && req.query.token != undefined)
+    {
+        const UNID = jwt.decode(req.query.token)
+        localStorage.setItem('UNID',UNID)
+        for (x in getUNIDFromLocalStorage())
+        {
+            log(x)
+        }
+    }
+    res.send('/')
+}
 
 //Fetch
 function fetch(req,res)
@@ -88,7 +110,7 @@ function login(req,res)
         let host  = (req.rawHeaders[1])
         let UNID  = req.body.UNID
         let email = req.body.email
-        let token = jwt.sign({ login: 'true', key: generateSecureId() }, generateSecureId(128));
+        let token = jwt.sign({ login: 'true',UNID: UNID}, generateSecureId(128));
         
         //Mail options
         const mailOptions = {
@@ -109,23 +131,21 @@ function login(req,res)
             </body>
             </html>`
         };
-        
+        log('ss')
         //Sending email
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-            console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-                req.session.UNID ={ 'UNID' : `${UNID}` }
-                // req.session.token = token
-                log(req.session)
-            }
-          });
-  
+        transporter.sendMail(mailOptions).then(function (email) {
+            log('mail send',email.messageId)
+            res.cookie('token',token)
+            res.render("login")
+            return
+        }).catch(function (exception) {
+            log('err'+exception)
+        });;
     }
-
-    //Rendering login page
-    res.render("login")
+    else
+    {
+        res.render('login')
+    }
 }
 
 //Signout
@@ -135,8 +155,9 @@ function singout(req,res)
     res.render("singout")
 }
 
+//Home
 function home(req, res) {
-    log(req.session)
+    log(req.cookies)
     con.query("SELECT * FROM profile;", (e, r) => {
         console.log(r, e);
         res.render("index")

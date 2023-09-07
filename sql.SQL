@@ -20,6 +20,8 @@ show tables;
 SELECT * FROM donor;
 SELECT * FROM profile;
 
+ALTER TABLE profile ADD COLUMN login VARCHAR(5);
+
 DELETE FROM `donor` ;
 DELETE FROM `patient` ;
 DELETE FROM `profile` ;
