@@ -12,6 +12,7 @@ const session           = require('express-session')
 
 const app = express()
 
+//Genertaing A random Key
 function generateSecureId(length = 16) {
     if (length <= 0 || typeof length !== 'number') {
         throw new Error('Invalid length for secure ID'); 
@@ -21,6 +22,7 @@ function generateSecureId(length = 16) {
     return bytes.toString('hex').slice(0, length);
 }
 
+//Gmail transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -29,6 +31,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+//App specified stuff
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.set("view engine", "pug")
@@ -36,7 +39,7 @@ app.use(express.static("views"))
 app.use(bodyParser.urlencoded({extended: true,}),);
 app.use(session({secret:generateSecureId(64),saveUninitialized:true,cookie : {maxAge:1000*60*60*3}}))
 
-
+//MySQL connection
 let con = mysql.createConnection({
     host: "localhost",
     user: "divyansh",
@@ -48,6 +51,7 @@ con.connect(function (err) {
     con.query("USE SAL;");
 });
 
+//End Points
 app.get("/", home)
 app.get("/fetch", fetch)
 app.get("/login", login)
@@ -60,9 +64,10 @@ app.get("/patient", patient)
 app.post("/patient", patient)
 app.get("/add_user", add_user)
 
+//Listner
 app.listen(2000)
 
-
+//Fetch
 function fetch(req,res)
 {
     con.query("SELECT * FROM patient",(e,r)=>{
@@ -74,15 +79,18 @@ function fetch(req,res)
     });
 }
 
+//Login
 function login(req,res)
 {   
     if(req.method == "POST")
     {   
+        //Varibles
         let host  = (req.rawHeaders[1])
         let UNID  = req.body.UNID
         let email = req.body.email
         let token = jwt.sign({ login: 'true', key: generateSecureId() }, generateSecureId(128));
         
+        //Mail options
         const mailOptions = {
             from: 'divyuzzzzzz@gmail.com',
             to: `${email}`,
@@ -102,6 +110,7 @@ function login(req,res)
             </html>`
         };
         
+        //Sending email
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
             console.log(error);
@@ -115,9 +124,11 @@ function login(req,res)
   
     }
 
+    //Rendering login page
     res.render("login")
 }
 
+//Signout
 function singout(req,res)
 {
     res.clearCookie('login')
@@ -132,6 +143,7 @@ function home(req, res) {
     }) 
 } 
 
+//Add user
 function add_user(req, res) {
     if (req.method == "POST") {
         let body = req.body
@@ -147,6 +159,7 @@ function add_user(req, res) {
     res.render("add")
 }   
 
+//Donate
 function donate(req,res)
 {
     if(req.method == "POST")
@@ -163,7 +176,7 @@ function donate(req,res)
     res.render("donate")
 }
 
-
+//Patient
 function patient(req,res)
 {
     body = req.body
