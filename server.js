@@ -66,6 +66,8 @@ app.post("/patient", patient)
 app.get("/add_user", add_user)
 app.get('/get_donor',get_donors)
 app.get('/get_patients',get_patients)
+//Listner
+app.listen(2000)
 
 function get_donors(req,res)
 {
@@ -80,8 +82,6 @@ function getLoginState(cookiesr)
     return a
 }
 
-//Listner
-app.listen(80)
 
 function verify(req,res) {
     if(req.query.token === req.cookies.token && req.query.token != undefined) // The user is now logged in

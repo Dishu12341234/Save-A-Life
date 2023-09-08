@@ -1,4 +1,4 @@
--- Active: 1693816931819@@127.0.0.1@3306@sal
+-- Active: 1693716310421@@127.0.0.1@3306@SAL
 
 USE SAL;
 CREATE TABLE patient
@@ -9,14 +9,9 @@ CREATE TABLE patient
     gender varchar(20)
 ); 
 
-DROP TABLE patient;
+-- DROP TABLE patient;
 
 SELECT * FROM patient;
-SELECT * FROM profile;
-
-SELECT * FROM patient;
-
-show tables;
 SELECT * FROM donor;
 SELECT * FROM profile;
 
