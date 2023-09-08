@@ -4,14 +4,15 @@ const smtp              = require('smtp-protocol')
 const mysql             = require("mysql")
 const crypto            = require('crypto');
 const express           = require("express") 
+const session           = require('express-session')
 const { log }           = require("console")
 const nodemailer        = require('nodemailer');
 const bodyParser        = require("body-parser")
-const cookieParser      = require("cookie-parser")
-const session           = require('express-session')
+const cookieParser      = require("cookie-parser")  
 
 const app = express()
 
+//Genertaing A random Key
 function generateSecureId(length = 16) {
     if (length <= 0 || typeof length !== 'number') {
         throw new Error('Invalid length for secure ID'); 
@@ -21,6 +22,7 @@ function generateSecureId(length = 16) {
     return bytes.toString('hex').slice(0, length);
 }
 
+//Gmail transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -29,6 +31,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+//App specified stuff
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.set("view engine", "pug")
@@ -36,7 +39,7 @@ app.use(express.static("views"))
 app.use(bodyParser.urlencoded({extended: true,}),);
 app.use(session({secret:generateSecureId(64),saveUninitialized:true,cookie : {maxAge:1000*60*60*3},resave:false}))
 
-
+//MySQL connection
 let con = mysql.createConnection({
     host: "localhost",
     user: "divyansh",
@@ -48,6 +51,7 @@ con.connect(function (err) {
     con.query("USE SAL;");
 });
 
+//End Points
 app.get("/", home)
 app.get("/fetch", fetch)
 app.get("/login", login)
@@ -59,30 +63,51 @@ app.get("/singout", singout)
 app.get("/patient", patient)
 app.post("/patient", patient)
 app.get("/add_user", add_user)
+app.get('/t',verify)
 
-app.listen(2000)
+function getLoginState(cookiesr)
+{
+    let a = cookiesr['login']
+    return a
+}
 
+//Listner
+app.listen(80)
 
+function verify(req,res) {
+    if(req.query.token === req.cookies.token && req.query.token != undefined)
+    {
+        res.cookie('UNID',req.query.UNID)
+        getLoginState(req.cookies)
+        res.clearCookie('token')
+    }
+    res.redirect('/')
+}
+
+//Fetch
 function fetch(req,res)
 {
     con.query("SELECT * FROM patient",(e,r)=>{
         if(e)
         return;
-        log(r)
-        res.json(r)
-        
-    });
+    log(r)
+    res.json(r)
+    
+});
 }
 
+//Login
 function login(req,res)
 {   
     if(req.method == "POST")
     {   
+        //Varibles
         let host  = (req.rawHeaders[1])
         let UNID  = req.body.UNID
         let email = req.body.email
-        let token = jwt.sign({ login: 'true', key: generateSecureId() }, generateSecureId(128));
+        let token = jwt.sign({ login: 'true'}, generateSecureId(128));
         
+        //Mail options
         const mailOptions = {
             from: 'divyuzzzzzz@gmail.com',
             to: `${email}`,
@@ -104,37 +129,43 @@ function login(req,res)
             </body>
             </html>`
         };
-        
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-            console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-                req.session.UNID ={ 'UNID' : `${UNID}` }
-                // req.session.token = token
-                log(req.session)
-            }
-          });
-  
+        log('ss')
+        //Sending email
+        transporter.sendMail(mailOptions).then(function (email) {
+            log('mail send',email.messageId)
+            res.cookie('token',token)
+            log(getLoginState(token))
+            res.redirect("/")
+            return
+        }).catch(function (exception) {
+            log('err'+exception)
+        });;
     }
-
-    res.render("login")
+    else
+    {
+        res.render('login')
+    }
 }
 
+//Signout
 function singout(req,res)
 {
-    res.clearCookie('login')
+    for(x in req.cookies)
+    {
+        res.clearCookie(x)
+    }
     res.render("singout")
 }
 
+//Home
 function home(req, res) {
-    log(req.session)
     con.query("SELECT * FROM profile;", (e, r) => {
-        console.log(r, e);
+        // console.log(r, e);
         res.render("index")
     }) 
 } 
 
+//Add user
 function add_user(req, res) {
     if (req.method == "POST") {
         let body = req.body
@@ -150,6 +181,7 @@ function add_user(req, res) {
     res.render("add")
 }   
 
+//Donate
 function donate(req,res)
 {
     if(req.method == "POST")
@@ -166,7 +198,7 @@ function donate(req,res)
     res.render("donate")
 }
 
-
+//Patient
 function patient(req,res)
 {
     body = req.body
