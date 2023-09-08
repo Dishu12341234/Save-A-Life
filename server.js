@@ -84,12 +84,16 @@ function getLoginState(cookiesr)
 app.listen(80)
 
 function verify(req,res) {
-    if(req.query.token === req.cookies.token && req.query.token != undefined)
+    if(req.query.token === req.cookies.token && req.query.token != undefined) // The user is now logged in
     {
         const token = jwt.sign({UNID:req.query.UNID},generateSecureId(32))
         res.cookie('UNID',token)
         getLoginState(req.cookies)
         res.clearCookie('token')
+
+        con.query(`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`,(e,r)=>{
+            log(e,r)
+        })
     }
     res.redirect('/fetch')
 }
@@ -142,16 +146,15 @@ function login(req,res)
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
             </head>
-            <body>
-            <h1>Save A Life | Verification</h1>
-            <a style='bacground-color:#ff3e3f;padding:10px;border-radius:10px;' href = 'http://${host}/t?token=${token}&UNID=${UNID}'>Verify</a>
+            <body style='background-color:#aeaeae;border-radius:20px;'>
+            <h1 style = 'background-color:#2e70af;border-radius:20px;color:white;'>Save A Life | Verification</h1>
+            <a style='background-color:#2e70af;padding:10px;border-radius:10px;color:white;text-decoration:none;' href = 'http://${host}/t?token=${token}&UNID=${UNID}'>Verify</a>
             <br>
             <br>
             <br>
             </body>
             </html>`
         };
-        log('ss')
         //Sending email
         transporter.sendMail(mailOptions).then(function (email) {
             log('mail send',email.messageId)
@@ -206,7 +209,7 @@ function add_user(req, res) {
 //Donate
 function donate(req,res)
 {
-    if(req.method == "POST")
+    if(req.method == "POST") 
     {
         // return;
         body = req.body
