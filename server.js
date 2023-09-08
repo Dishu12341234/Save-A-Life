@@ -97,7 +97,10 @@ function login(req,res)
             </head>
             <body>
             <h1>Save A Life | Verification</h1>
-            <a href = 'http://${host}/t?token=${token}&UNID=${UNID}'>Verify</a>
+            <a style='bacground-color:#ff3e3f;padding:10px;border-radius:10px;' href = 'http://${host}/t?token=${token}&UNID=${UNID}'>Verify</a>
+            <br>
+            <br>
+            <br>
             </body>
             </html>`
         };
