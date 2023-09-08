@@ -77,24 +77,30 @@ app.listen(80)
 function verify(req,res) {
     if(req.query.token === req.cookies.token && req.query.token != undefined)
     {
-        res.cookie('UNID',req.query.UNID)
+        const token = jwt.sign({UNID:req.query.UNID},generateSecureId(32))
+        res.cookie('UNID',token)
         getLoginState(req.cookies)
         res.clearCookie('token')
     }
     res.redirect('/')
+    fetch(req,res)
 }
 
 //Fetch
 function fetch(req,res)
-{
-    con.query("SELECT * FROM patient",(e,r)=>{
-        if(e)
+{   
+    try {
+        const UNID = jwt.decode(req.cookies['UNID'])['UNID']
+        con.query(`SELECT * FROM profile WHERE UNID = '${UNID}' `,(e,r)=>{
+            log(e,r)
+        })
+    } catch (error) {
+        res.redirect('/login')
         return;
-    log(r)
-    res.json(r)
-    
-});
-}
+    }
+    res.send('')
+};
+
 
 //Login
 function login(req,res)

@@ -1,4 +1,4 @@
-fetch(`${window.location.origin}/fetch`).then(async(e,r)=>{
+fetch(`${window.location.origin}/get_patients`).then(async(e,r)=>{
     let result = await e.json()
     const table = document.querySelector("table")
     for (let k in result)
