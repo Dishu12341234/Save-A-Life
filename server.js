@@ -69,17 +69,27 @@ app.get('/get_patients',get_patients)
 //Listner
 app.listen(2000)
 
+//Send the mail for login and signin
+function send_main(res,mailOptions,token=null)
+{
+    transporter.sendMail(mailOptions).then(function (email) {
+        log('mail send',email.messageId)
+        if(token != (null||undefined))
+        res.cookie('token',token)
+        res.render('postLogin')
+        return
+    }).catch(function (exception) {
+        log('err'+exception)
+        res.render('login')
+    });;
+}
+
+//Get the donor list
 function get_donors(req,res)
 {
     con.query('SELECT * FROM donor',(e,r)=>{
         res.json(r)
     })
-}
-
-function getLoginState(cookiesr)
-{
-    let a = cookiesr['login']
-    return a
 }
 
 
@@ -88,7 +98,6 @@ function verify(req,res) {
     {
         const token = jwt.sign({UNID:req.query.UNID},generateSecureId(32))
         res.cookie('UNID',token)
-        getLoginState(req.cookies)
         res.clearCookie('token')
 
         con.query(`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`,(e,r)=>{
@@ -121,6 +130,24 @@ function fetch(req,res)
     }
 };
 
+//Check if the user is logged in or not
+function isLoggedIn(PUNID,cb=function(){}) {//Parameter UNID
+    let login = false
+     try {
+        const UNID = jwt.decode(PUNID)['UNID'];
+        let sql = `SELECT login FROM profile WHERE UNID = '${UNID}'`
+        con.query(sql,(e,r)=>{
+            if(login)
+            {
+
+            }
+     })
+
+    } catch (error) {
+        log(error)
+        return false;
+    }
+}
 
 //Login
 function login(req,res)
@@ -156,15 +183,7 @@ function login(req,res)
             </html>`
         };
         //Sending email
-        transporter.sendMail(mailOptions).then(function (email) {
-            log('mail send',email.messageId)
-            res.cookie('token',token)
-            log(getLoginState(token))
-            res.redirect("/")
-            return
-        }).catch(function (exception) {
-            log('err'+exception)
-        });;
+        send_main(res,mailOptions,token)
     }
     else
     {
@@ -184,6 +203,7 @@ function singout(req,res)
 
 //Home
 function home(req, res) {
+    isLoggedIn(req.cookies['UNID'])
     con.query("SELECT * FROM profile;", (e, r) => {
         // console.log(r, e);
         res.render("index")
@@ -195,7 +215,7 @@ function add_user(req, res) {
     if (req.method == "POST") {
         let body = req.body
         let unid = generateSecureId(32)
-        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false');`
+        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}');`
         log(sql)
         con.query(sql,(e,r)=>{
             log(e,r)

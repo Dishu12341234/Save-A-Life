@@ -15,8 +15,11 @@ SELECT * FROM patient;
 SELECT * FROM donor;
 SELECT * FROM profile;
 
-ALTER TABLE profile ADD COLUMN login VARCHAR(5);
+DESCRIBE PROFILE;
+
+ALTER TABLE profile ADD COLUMN email VARCHAR(100); -- Run this in the school PC
 
 DELETE FROM `donor` ;
 DELETE FROM `patient` ;
 DELETE FROM `profile` ;
+
