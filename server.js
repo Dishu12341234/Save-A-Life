@@ -53,17 +53,26 @@ con.connect(function (err) {
 
 //End Points
 app.get("/", home)
-app.get("/fetch", fetch)
+app.get('/t',verify)
 app.get("/login", login)
+app.get("/fetch", fetch)
 app.post("/login", login)
 app.post("/add", add_user)
 app.get("/donate", donate)
 app.post("/donate", donate) 
-app.get("/singout", singout)
 app.get("/patient", patient)
+app.get("/singout", singout)
 app.post("/patient", patient)
 app.get("/add_user", add_user)
-app.get('/t',verify)
+app.get('/get_donor',get_donors)
+app.get('/get_patients',get_patients)
+
+function get_donors(req,res)
+{
+    con.query('SELECT * FROM donor',(e,r)=>{
+        res.json(r)
+    })
+}
 
 function getLoginState(cookiesr)
 {
@@ -82,23 +91,30 @@ function verify(req,res) {
         getLoginState(req.cookies)
         res.clearCookie('token')
     }
-    res.redirect('/')
-    fetch(req,res)
+    res.redirect('/fetch')
 }
 
-//Fetch
+function get_patients(req,res)
+{
+    con.query('SELECT * FROM patient',(e,r)=>{
+        res.json(r)
+    })
+}
+
+//Fetch : to check if the user is logged in or not 
 function fetch(req,res)
 {   
     try {
         const UNID = jwt.decode(req.cookies['UNID'])['UNID']
         con.query(`SELECT * FROM profile WHERE UNID = '${UNID}' `,(e,r)=>{
             log(e,r)
+            res.redirect('/')
         })
     } catch (error) {
+        log(error)
         res.redirect('/login')
         return;
     }
-    res.send('')
 };
 
 
@@ -191,9 +207,7 @@ function add_user(req, res) {
 function donate(req,res)
 {
     if(req.method == "POST")
-    {   
-
-    }
+    {
         // return;
         body = req.body
         sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
@@ -201,6 +215,7 @@ function donate(req,res)
             log(e,r)
             
         })
+    }
     res.render("donate")
 }
 
@@ -208,9 +223,12 @@ function donate(req,res)
 function patient(req,res)
 {
     body = req.body
-    sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
-    con.query(sql,(e,r)=>{
-        log(e,r)
-    })
+    if(req.method === 'POST')
+    {
+        sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+        con.query(sql,(e,r)=>{
+            log(e,r)
+        })
+    }
     res.render("patient")//ppo
 }
