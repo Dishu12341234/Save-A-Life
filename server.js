@@ -9,9 +9,7 @@ const { log }           = require("console")
 const nodemailer        = require('nodemailer');
 const bodyParser        = require("body-parser")
 const cookieParser      = require("cookie-parser")  
-const storage           = require('node-localstorage')
 
-const localStorage = new storage.LocalStorage('./scratch')
 const app = express()
 
 //Genertaing A random Key
@@ -53,12 +51,6 @@ con.connect(function (err) {
     con.query("USE SAL;");
 });
 
-//getting the UNID from the local storage if it exists
-function getUNIDFromLocalStorage()
-{
-    return localStorage.getItem('UNID')
-}
-
 //End Points
 app.get("/", home)
 app.get("/fetch", fetch)
@@ -73,20 +65,23 @@ app.post("/patient", patient)
 app.get("/add_user", add_user)
 app.get('/t',verify)
 
+function getLoginState(cookiesr)
+{
+    let a = cookiesr['login']
+    return a
+}
+
 //Listner
-app.listen(2000)
+app.listen(80)
 
 function verify(req,res) {
     if(req.query.token === req.cookies.token && req.query.token != undefined)
     {
-        const UNID = jwt.decode(req.query.token)
-        localStorage.setItem('UNID',UNID)
-        for (x in getUNIDFromLocalStorage())
-        {
-            log(x)
-        }
+        res.cookie('UNID',req.query.UNID)
+        getLoginState(req.cookies)
+        res.clearCookie('token')
     }
-    res.send('/')
+    res.redirect('/')
 }
 
 //Fetch
@@ -95,10 +90,10 @@ function fetch(req,res)
     con.query("SELECT * FROM patient",(e,r)=>{
         if(e)
         return;
-        log(r)
-        res.json(r)
-        
-    });
+    log(r)
+    res.json(r)
+    
+});
 }
 
 //Login
@@ -110,7 +105,7 @@ function login(req,res)
         let host  = (req.rawHeaders[1])
         let UNID  = req.body.UNID
         let email = req.body.email
-        let token = jwt.sign({ login: 'true',UNID: UNID}, generateSecureId(128));
+        let token = jwt.sign({ login: 'true'}, generateSecureId(128));
         
         //Mail options
         const mailOptions = {
@@ -136,7 +131,8 @@ function login(req,res)
         transporter.sendMail(mailOptions).then(function (email) {
             log('mail send',email.messageId)
             res.cookie('token',token)
-            res.render("login")
+            log(getLoginState(token))
+            res.redirect("/")
             return
         }).catch(function (exception) {
             log('err'+exception)
@@ -151,15 +147,17 @@ function login(req,res)
 //Signout
 function singout(req,res)
 {
-    res.clearCookie('login')
+    for(x in req.cookies)
+    {
+        res.clearCookie(x)
+    }
     res.render("singout")
 }
 
 //Home
 function home(req, res) {
-    log(req.cookies)
     con.query("SELECT * FROM profile;", (e, r) => {
-        console.log(r, e);
+        // console.log(r, e);
         res.render("index")
     }) 
 } 
