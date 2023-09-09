@@ -5,18 +5,16 @@ div_nav.className = 'navbar'
 div_nav.style.paddingBottom = '8px'
 const ul = document.createElement("ul")
 
-const redirects = 
-['home','signUp','login','signOut','donate','patient']
+const redirects =
+    ['home', 'signUp', 'login', 'signOut', 'donate', 'patient']
 
-for(let i = 0; i < redirects.length;i++)
-{   
+for (let i = 0; i < redirects.length; i++) {
     let li = document.createElement("li")
-    let a  = document.createElement("a")
+    let a = document.createElement("a")
     a.innerText = redirects[i]
-    if(a.innerText != 'home')
-    a.href = a.innerText
-    else
-    {
+    if (a.innerText != 'home')
+        a.href = a.innerText
+    else {
         a.href = '/ '
     }
     li.appendChild(a)
