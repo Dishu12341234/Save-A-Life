@@ -1,14 +1,14 @@
-const fs                = require("fs")    
+const fs                = require('fs')    
 const jwt               = require('jsonwebtoken');
 const smtp              = require('smtp-protocol')
-const mysql             = require("mysql")
+const mysql             = require('mysql')
 const crypto            = require('crypto');
-const express           = require("express") 
+const express           = require('express') 
 const session           = require('express-session')
-const { log }           = require("console")
+const { log }           = require('console')
 const nodemailer        = require('nodemailer');
-const bodyParser        = require("body-parser")
-const cookieParser      = require("cookie-parser")  
+const bodyParser        = require('body-parser')
+const cookieParser      = require('cookie-parser')  
 
 const app = express()
 
@@ -34,36 +34,36 @@ const transporter = nodemailer.createTransport({
 //App specified stuff
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.set("view engine", "pug")
-app.use(express.static("views"))
+app.set('view engine', 'pug')
+app.use(express.static('views'))
 app.use(bodyParser.urlencoded({extended: true,}),);
 app.use(session({secret:generateSecureId(64),saveUninitialized:true,cookie : {maxAge:1000*60*60*3},resave:false}))
 
 //MySQL connection
 let con = mysql.createConnection({
-    host: "localhost",
-    user: "divyansh",
-    password: "divyansh@mysql"
+    host: 'localhost',
+    user: 'divyansh',
+    password: 'divyansh@mysql'
 });
 con.connect(function (err) {
     if (err) throw err;
-    console.log("Connected!");
-    con.query("USE SAL;");
+    console.log('Connected!');
+    con.query('USE SAL;');
 });
 
 //End Points
-app.get("/", home)
+app.get('/', home)
 app.get('/t',verify)
-app.get("/login", login)
-app.get("/fetch", fetch)
-app.post("/login", login)
-app.post("/add", add_user)
-app.get("/donate", donate)
-app.post("/donate", donate) 
-app.get("/patient", patient)
-app.get("/signOut", singout)
-app.post("/patient", patient)
-app.get("/signUp", add_user)
+app.get('/login', login)
+app.get('/fetch', fetch)
+app.post('/login', login)
+app.post('/add', add_user)
+app.get('/donate', donate)
+app.post('/donate', donate) 
+app.get('/patient', patient)
+app.get('/signOut', singout)
+app.post('/patient', patient)
+app.get('/signUp', add_user)
 app.get('/get_donor',get_donors)
 app.get('/get_patients',get_patients)
 app.get('/sendLoginStatus',sendLoginStatus)
@@ -170,7 +170,7 @@ function isLoggedIn(PUNID,cb=function(){},scb=function(){}) {//Parameter UNID
 //Login
 function login(req,res)
 {   
-    if(req.method == "POST")
+    if(req.method == 'POST')
     {   
         //Varibles
         let host  = (req.rawHeaders[1])
@@ -185,10 +185,10 @@ function login(req,res)
             subject: 'Verificatiion',
             html: ` 
             <!DOCTYPE html>
-            <html lang="en">
+            <html lang='en'>
             <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
             <title>Document</title>
             </head>
             <body style='background-color:#aeaeae;border-radius:20px;'>
@@ -216,43 +216,40 @@ function singout(req,res)
     {
         res.clearCookie(x)
     }
-    res.render("singout")
+    res.render('singout')
 }
 
 //Home
 function home(req, res) {
-    isLoggedIn(req.cookies['UNID'],()=>{
-        log("Hemlo")
-    })
-    con.query("SELECT * FROM profile;", (e, r) => {
+    con.query('SELECT * FROM profile;', (e, r) => {
         // console.log(r, e);
-        res.render("index")
+        res.render('index')
     }) 
 } 
 
 //Add user
 function add_user(req, res) {
-    if (req.method == "POST") {
+    if (req.method == 'POST') {
         let body = req.body
         let unid = generateSecureId(32)
         let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}');`
         log(sql)
         con.query(sql,(e,r)=>{
             log(e,r)
-            res.render("login")
+            res.render('login')
         })
     }
     else
-    res.render("add")
+    res.render('add')
 }   
 
 //Donate
 function donate(req,res)
 {
-    if(req.method == "POST") 
+    if(req.method == 'POST') 
     {
         // return;
-        log("FUCK")
+        log('FUCK')
         body = req.body
         sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
         con.query(sql,(e,r)=>{
@@ -262,7 +259,7 @@ function donate(req,res)
         })
     }
     else
-    res.render("donate")
+    res.render('donate')
 }
 
 //Patient
@@ -278,5 +275,5 @@ function patient(req,res)
         })
     }
     else
-    res.render("patient")//ppo
+    res.render('patient')//ppo
 }
