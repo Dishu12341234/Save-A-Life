@@ -7,20 +7,6 @@ html(lang="en")
         link(rel="stylesheet", href="patient.css")
         script(src="patient.js",defer) 
     body 
-     .navbar 
-            ul 
-                li
-                    a(href="/", target="", rel="noopener noreferrer") home
-                li
-                    a(href="/add_user", target="", rel="noopener noreferrer") sing in
-                li
-                    a(href="/donate", target="", rel="noopener noreferrer") donate
-                li
-                    a(href="/patient", target="", rel="noopener noreferrer") patient
-                li
-                    a(href="/singout", target="", rel="noopener noreferrer") sing out
-                li
-                        a(href="/login", target="", rel="noopener noreferrer") login
     form(action="/patient", method="post") 
             input(type="text", name="UNID",placeholder="Enter your UNID" ,required)
             br
