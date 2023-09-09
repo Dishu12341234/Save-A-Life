@@ -66,13 +66,21 @@ app.post("/patient", patient)
 app.get("/signUp", add_user)
 app.get('/get_donor',get_donors)
 app.get('/get_patients',get_patients)
+app.get('/sendLoginStatus',sendLoginStatus)
 //Listner
 app.listen(2000)
 
 //An endPoint for frontend to get the login status
-function sendLoginStatus()
+function sendLoginStatus(req,res)
 {
-
+    isLoggedIn(req.cookies,()=>{
+        log('s')
+        res.send(true);
+        return;
+    },
+    ()=>{
+        res.send(false)
+    });
 }
 
 //Send the mail for login and signin
@@ -102,7 +110,7 @@ function get_donors(req,res)
 
 function verify(req,res) {
     if(req.query.token === req.cookies.token && req.query.token != undefined) // The user is now logged in
-    {
+    {   
         const token = jwt.sign({UNID:req.query.UNID},generateSecureId(32))
         res.cookie('UNID',token)
         res.clearCookie('token')
@@ -132,28 +140,29 @@ function fetch(req,res)
             res.redirect('/')
         })
     } catch (error) {
-        log(error)
         res.redirect('/login')
         return;
     }
 };
 
 //Check if the user is logged in or not
-function isLoggedIn(PUNID,cb=function(){}) {//Parameter UNID
+function isLoggedIn(PUNID,cb=function(){},scb=function(){}) {//Parameter UNID
     let login = false
      try {
-        const UNID = jwt.decode(PUNID)['UNID'];
+
+        let UNID = jwt.decode(PUNID['UNID']);
+        UNID = UNID['UNID']
         let sql = `SELECT login FROM profile WHERE UNID = '${UNID}'`
         con.query(sql,(e,r)=>{
         login = r[0]['login']
             if(login)
-            {
-                cb()
-            }
+            cb()
+            else
+            scb()
      })
 
     } catch (error) {
-        log(error)
+        scb()
         return false;
     }
 }
