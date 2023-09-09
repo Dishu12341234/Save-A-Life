@@ -40,7 +40,7 @@ app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie:
 
 //MySQL connection
 let con = mysql.createConnection({
-    host: 'localhost',
+    host: '192.168.1.145',
     user: 'divyansh',
     password: 'divyansh@mysql'
 });
