@@ -5,9 +5,7 @@ for (i = 17; i < 100;i++)
     option = document.createElement("option")
     option.innerText = i+1+""
     age.appendChild(option)
-    console.log(option);
 }
-
 const patients = fetch(`${window.location.origin}/get_patients`)
 const table = document.createElement('table')
 table.border= '1'
@@ -17,7 +15,6 @@ patients.then(r=>{
 
 function display(r)
 {   
-    console.log(r)
     for(let k in r)
     {
         const tr = document.createElement('tr')
@@ -25,6 +22,7 @@ function display(r)
         {
             const td = document.createElement('td')
             td.innerText = r[k][l] 
+            if(l != 'login')
             tr.appendChild(td)
         }
         table.appendChild(tr)

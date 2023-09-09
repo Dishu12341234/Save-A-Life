@@ -14,6 +14,7 @@ function display(r)
         {
             const td = document.createElement('td')
             td.innerText = r[k][l] 
+            if(l != 'login')
             tr.appendChild(td)
         }
         table.appendChild(tr)

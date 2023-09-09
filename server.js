@@ -69,6 +69,12 @@ app.get('/get_patients',get_patients)
 //Listner
 app.listen(2000)
 
+//An endPoint for frontend to get the login status
+function sendLoginStatus()
+{
+
+}
+
 //Send the mail for login and signin
 function send_main(res,mailOptions,token=null)
 {
@@ -87,7 +93,8 @@ function send_main(res,mailOptions,token=null)
 //Get the donor list
 function get_donors(req,res)
 {
-    con.query('SELECT * FROM donor',(e,r)=>{
+    con.query('SELECT * FROM donor   INNER JOIN profile ON donor.UNID = profile.UNID',(e,r)=>{
+        log(e,r)
         res.json(r)
     })
 }
@@ -109,7 +116,8 @@ function verify(req,res) {
 
 function get_patients(req,res)
 {
-    con.query('SELECT * FROM patient',(e,r)=>{
+    con.query('SELECT * FROM patient INNER JOIN profile ON patient.UNID = profile.UNID',(e,r)=>{
+        log(e,r)
         res.json(r)
     })
 }
@@ -235,13 +243,16 @@ function donate(req,res)
     if(req.method == "POST") 
     {
         // return;
+        log("FUCK")
         body = req.body
         sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
         con.query(sql,(e,r)=>{
             log(e,r)
+            res.redirect('/donate')
             
         })
     }
+    else
     res.render("donate")
 }
 
@@ -254,7 +265,9 @@ function patient(req,res)
         sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
         con.query(sql,(e,r)=>{
             log(e,r)
+            res.redirect('/donate')
         })
     }
+    else
     res.render("patient")//ppo
 }
