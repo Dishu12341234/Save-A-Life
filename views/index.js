@@ -18,6 +18,5 @@ function display(r)
         }
         table.appendChild(tr)
     }
+    document.body.appendChild(table)
 }
-
-document.body.appendChild(table)

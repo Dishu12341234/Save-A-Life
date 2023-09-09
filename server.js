@@ -61,9 +61,9 @@ app.post("/add", add_user)
 app.get("/donate", donate)
 app.post("/donate", donate) 
 app.get("/patient", patient)
-app.get("/singout", singout)
+app.get("/signOut", singout)
 app.post("/patient", patient)
-app.get("/add_user", add_user)
+app.get("/signUp", add_user)
 app.get('/get_donor',get_donors)
 app.get('/get_patients',get_patients)
 //Listner
@@ -137,9 +137,10 @@ function isLoggedIn(PUNID,cb=function(){}) {//Parameter UNID
         const UNID = jwt.decode(PUNID)['UNID'];
         let sql = `SELECT login FROM profile WHERE UNID = '${UNID}'`
         con.query(sql,(e,r)=>{
+        login = r[0]['login']
             if(login)
             {
-
+                cb()
             }
      })
 
@@ -185,7 +186,7 @@ function login(req,res)
         //Sending email
         send_main(res,mailOptions,token)
     }
-    else
+    else    
     {
         res.render('login')
     }
@@ -203,7 +204,9 @@ function singout(req,res)
 
 //Home
 function home(req, res) {
-    isLoggedIn(req.cookies['UNID'])
+    isLoggedIn(req.cookies['UNID'],()=>{
+        log("Hemlo")
+    })
     con.query("SELECT * FROM profile;", (e, r) => {
         // console.log(r, e);
         res.render("index")

@@ -4,6 +4,9 @@ body
 }
 
 .navbar{
+    position: absolute;
+    width: 100dvw;
+    top: -4px;
     background-color: #ff3e3f;
     display: flex;
     align-items: center;

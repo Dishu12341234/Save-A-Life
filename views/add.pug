@@ -6,7 +6,11 @@ html(lang="en")
         title Add An User | Save A Life 
         script(src="add.js",defer) 
         link(rel="stylesheet", href="add.css")
+        script(src="nav.js",defer)
     body 
+        br
+        br
+        br
         form(action="/add", method="post") 
             <select onchange="print_city('state', this.selectedIndex);" id="sts" name ="stt" class="form-control" required></select>
             <select id ="state" class="form-control" name = "city"required></select>

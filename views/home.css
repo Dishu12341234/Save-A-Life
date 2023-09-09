@@ -4,8 +4,11 @@ body
 }
 
 .navbar{
+    position: absolute;
+    top: -4px;
+    width: 100dvw;
     background-color: #ff3e3f;
-    display: flex;
+    display: block;
     align-items: center;
     justify-content: space-between;
 }
