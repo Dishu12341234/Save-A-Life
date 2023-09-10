@@ -40,7 +40,7 @@ app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie:
 
 //MySQL connection
 let con = mysql.createConnection({
-    host: '192.168.1.145',
+    host: 'localhost',
     user: 'divyansh',
     password: 'divyansh@mysql'
 });
@@ -74,7 +74,6 @@ function sendLoginStatus(req, res) {
     isLoggedIn(req.cookies, () => {
         log('s')
         res.send(true);
-        return;
     },
         () => {
             res.send(false)
@@ -98,7 +97,6 @@ function send_main(res, mailOptions, token = null) {
 //Get the donor list
 function get_donors(req, res) {
     con.query('SELECT * FROM donor   INNER JOIN profile ON donor.UNID = profile.UNID', (e, r) => {
-
         res.json(r)
     })
 }
@@ -262,5 +260,3 @@ function patient(req, res) {
     else
         res.render('patient')//ppo
 }
-
-// 3e7896959e22e2b42500fa57ab7fb501800b4246a54cb6dd8eb61856c3c85bcc
