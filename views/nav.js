@@ -23,15 +23,3 @@ for (let i = 0; i < redirects.length; i++) {
 
 div_nav.appendChild(ul)
 body.appendChild(div_nav)
-
-function settings(x)
-{
-    
-}
-
-const login_status = fetch(`${window.location.origin}/sendLoginStatus`)
-login_status.then(r=>{
-    r.json().then(x=>{
-        settings(x)
-    })
-})
