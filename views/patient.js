@@ -1,4 +1,4 @@
-age = document.getElementById("age")
+let age = document.getElementById("age")
 
 for (i = 17; i < 100;i++)
 {

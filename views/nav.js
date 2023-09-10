@@ -22,5 +22,15 @@ for (let i = 0; i < redirects.length; i++) {
     ul.appendChild(li)
 }
 
+
+
 div_nav.appendChild(ul)
 body.appendChild(div_nav)
+console.log(document.body);
+
+
+const settings = document.createElement("iframe")
+settings.style.border = 0
+const nav = document.getElementById("navbar")
+settings.src = './settings.svg'
+nav.appendChild(settings)
