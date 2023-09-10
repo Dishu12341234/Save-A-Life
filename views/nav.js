@@ -2,6 +2,7 @@ const body = document.body
 
 const div_nav = document.createElement("div")
 div_nav.className = 'navbar'
+div_nav.id = 'navbar'
 div_nav.style.paddingBottom = '8px'
 const ul = document.createElement("ul")
 

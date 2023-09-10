@@ -38,3 +38,9 @@ function display(r) {
 
 
 document.body.appendChild(table)
+
+const settings = document.createElement("iframe")
+settings.style.border = 0
+const nav = document.getElementById("navbar")
+settings.src = './settings.svg'
+nav.appendChild(settings)
