@@ -67,7 +67,7 @@ app.get('/get_donor', get_donors)
 app.get('/get_patients', get_patients)
 app.get('/sendLoginStatus', sendLoginStatus)
 //Listner
-app.listen(2000)
+app.listen(80)
 
 //An endPoint for frontend to get the login status
 function sendLoginStatus(req, res) {
