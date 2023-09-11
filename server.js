@@ -40,7 +40,7 @@ app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie:
 
 //MySQL connection
 let con = mysql.createConnection({
-    host: 'localhost',
+    host: '192.168.1.69',
     user: 'divyansh',
     password: 'divyansh@mysql'
 });
@@ -260,3 +260,5 @@ function patient(req, res) {
     else
         res.render('patient')//ppo
 }
+
+//6c18034702cc402e0e26439fd6433082519d9a1ab1de7294b0ec2cfe95c763c7

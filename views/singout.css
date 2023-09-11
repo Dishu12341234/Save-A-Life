@@ -27,11 +27,12 @@ body
     content: '';
     height: 3px;
     width: 0;
-    background-color: #AD3535;
+    background-color: #FD3535;
     position: absolute;
     left: 0;
     bottom: -10px;
-    transition: width 0.2s,height .2s .1s;
+    transition: width 0.3s,height .2s .1s;
+    border-radius: 10px;
 }
 .navbar ul li:hover:after{
     width: 100%;
