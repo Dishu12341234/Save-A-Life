@@ -12,7 +12,7 @@ input[type="checkBox"]
     z-index: 100;
 }
 
-input,select
+input,select,table
 {
     position: relative;
     left: 8.4vw;
@@ -27,16 +27,30 @@ input,select
     top: 0;
     height: 98.8vh;
 }
-
-.navbar > ul > li > a{
-    
-    text-decoration: none;
-    color: #FFF;
-}
-.navbar > ul > li > a:hover {
-    margin-left:0px ;
-    color: black;
-}
 .navbar > ul{
     list-style: none;
+}
+
+.navbar > ul >li
+{
+    position: relative;
+    left: -2vw;
+    width: 100%;
+    margin: 10px;
+}
+
+.navbar > ul > li > a{
+    text-decoration: none;
+    color: #FFF;
+    transition: all ease-out .3s ;
+    padding: 2px;
+    z-index: 100;
+    border-radius: 5px;
+
+}
+.navbar > ul > li > a:hover 
+{
+    background-color: white;
+    color: #ad3535;
+    padding: 7px;
 }

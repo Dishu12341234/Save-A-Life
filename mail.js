@@ -1,27 +1,29 @@
-const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const fs = require('fs');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'divyuzzzzzz@gmail.com',
-    pass: 'shdigfnkkbxuupvf'
+
+function generateSecureId(length = 16) {
+  if (length <= 0 || typeof length !== 'number') {
+      throw new Error('Invalid length for secure ID');
   }
-});
 
-const mailOptions = {
-  from: 'divyuzzzzzz@gmail.com',
-  to: 'divyasnhundley@gmail.com',
-  subject: 'Subject',
-  text: 'Email content'
-};
+  const bytes = crypto.randomBytes(Math.ceil(length / 2));
+  return bytes.toString('hex').slice(0, length);
+}
+
+let x = []
+
+for(let i = 0; i < 10000; i++)
+{
+  x.push(generateSecureId(4))
+}
+
+console.log(x)
 
 
-
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
- console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-    // do something useful
+fs.writeFile('./test.txt', `${x}`, err => {
+  if (err) {
+    console.error(err);
   }
+  // file written successfully
 });

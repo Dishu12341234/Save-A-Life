@@ -80,6 +80,7 @@ app.get('/', home)
 app.get('/t', verify)
 app.get('/login', login)
 app.get('/fetch', fetch)
+app.get('/rm',removeUser)
 app.post('/login', login)
 app.post('/add', add_user)
 app.get('/donate', donate)
@@ -94,6 +95,15 @@ app.get('/sendLoginStatus', sendLoginStatus)
 //Listner
 app.listen(80)
 
+
+function removeUser(req,res){
+    let UNID = req.query.rf
+    sql = `DELETE FROM profile WHERE UNID = '${UNID}'`
+    con.query(sql,(e,r)=>{log(e,r)})
+    res.render('index')
+
+}
+
 //An endPoint for frontend to get the login status
 function sendLoginStatus(req, res) {
     isLoggedIn(req.cookies, () => {
@@ -106,7 +116,7 @@ function sendLoginStatus(req, res) {
 }
 
 //Send the mail for login and signin
-function send_main(res, mailOptions, token = null) {
+function send_mail(res, mailOptions, token = null) {
     transporter.sendMail(mailOptions).then(function (email) {
         log('mail send', email.messageId)
         if (token != (null || undefined))
@@ -216,7 +226,7 @@ function login(req, res) {
             </html>`
         };
         //Sending email
-        send_main(res, mailOptions, token)
+        send_mail(res, mailOptions, token)
     }
     else {
         res.render('login')
@@ -243,12 +253,32 @@ function home(req, res) {
 function add_user(req, res) {
     if (req.method == 'POST') {
         let body = req.body
-        let unid = generateSecureId(32)
-        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}');`
-        log(sql)
-        con.query(sql, (e, r) => {
-
-            res.render('login')
+        let unid = generateSecureId(4)
+        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}','${Date().toLocaleUpperCase()}');`
+        con.query(sql, (e, r) => {//Succes
+            log(e,r)
+            let host = (req.rawHeaders[1])
+            const mailOptions = {
+                from: 'divyuzzzzzz@gmail.com',
+                to: `${body.email}`,
+                subject: 'Verificatiion',
+                html: ` 
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Document</title>
+                </head>
+                <body style='background-color:#aeaeae;border-radius:20px;'>
+                <h1 style = 'background-color:#2e70af;border-radius:20px;color:white;'>Save A Life | SignIn Succes</h1>
+                <p>Your UNID is ${unid}</p>
+                <p>Wasn't you?</p>
+                <a href='http://${host}/rm?rf=${unid}'>Remove Account</a>
+                </body>
+                </html>`
+            };
+            send_mail(res,mailOptions)
         })
     }
     else
@@ -258,8 +288,6 @@ function add_user(req, res) {
 //Donate
 function donate(req, res) {
     if (req.method == 'POST') {
-        // return;
-        log('FUCK')
         body = req.body
         sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
         con.query(sql, (e, r) => {

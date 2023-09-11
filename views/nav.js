@@ -8,18 +8,20 @@ div_nav.style.paddingBottom = '8px'
 const ul = document.createElement("ul")
 
 const redirects =
-    ['home', 'signUp', 'login', 'signOut', 'donate', 'patient']
+    ['Home', 'SignUp', 'Login', 'SignOut', 'Donate', 'Patient']
 
 for (let i = 0; i < redirects.length; i++) {
+    let hr = document.createElement("hr")
     let li = document.createElement("li")
     let a = document.createElement("a")
     a.innerText = redirects[i]
-    if (a.innerText != 'home')
-        a.href = a.innerText
+    if (a.innerText != 'Home')
+        a.href = a.innerText.toLocaleLowerCase()
     else {
         a.href = '/ '
     }
     li.appendChild(a)
+    li.appendChild(hr)
     ul.appendChild(li)
 }
 
