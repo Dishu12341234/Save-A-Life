@@ -28,11 +28,7 @@ for (const name of Object.keys(nets)) {
     }
 }
 
-for(let k in results)
-{
-    console.log(results[k][0],'->',k);
-    break;
-}
+
 
 const app = express()
 
@@ -63,12 +59,17 @@ app.use(express.static('views'))
 app.use(bodyParser.urlencoded({ extended: true, }),);
 app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie: { maxAge: 1000 * 60 * 60 * 3 }, resave: false }))
 
-//MySQL connection
-let con = mysql.createConnection({
-    host: results['en5'][0],
-    user: 'divyansh',
-    password: 'divyansh@mysql'
-});
+
+
+for (let k in results) {
+    var con = mysql.createConnection({
+        host: results[k][0],
+        user: 'divyansh',
+        password: 'divyansh@mysql'
+    });
+    log(results[k][0] + ' ------> ' + k)
+    break;
+}
 con.connect(function (err) {
     if (err) throw err;
     console.log('Connected!');
@@ -80,7 +81,7 @@ app.get('/', home)
 app.get('/t', verify)
 app.get('/login', login)
 app.get('/fetch', fetch)
-app.get('/rm',removeUser)
+app.get('/rm', removeUser)
 app.post('/login', login)
 app.post('/add', add_user)
 app.get('/donate', donate)
@@ -91,15 +92,16 @@ app.post('/patient', patient)
 app.get('/signUp', add_user)
 app.get('/get_donor', get_donors)
 app.get('/get_patients', get_patients)
+app.get('/ptlog',(req,res)=>{res.render('postLogin')})
 app.get('/sendLoginStatus', sendLoginStatus)
 //Listner
 app.listen(80)
 
 
-function removeUser(req,res){
+function removeUser(req, res) {
     let UNID = req.query.rf
     sql = `DELETE FROM profile WHERE UNID = '${UNID}'`
-    con.query(sql,(e,r)=>{log(e,r)})
+    con.query(sql, (e, r) => { log(e, r) })
     res.render('index')
 
 }
@@ -243,8 +245,7 @@ function singout(req, res) {
 
 //Home
 function home(req, res) {
-    con.query('SELECT * FROM profile;', (e, r) => {
-        // console.log(r, e);
+    con.query('SELECT * FROM profile`;', (e, r) => {
         res.render('index')
     })
 }
@@ -256,7 +257,7 @@ function add_user(req, res) {
         let unid = generateSecureId(4)
         let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}','${Date().toLocaleUpperCase()}');`
         con.query(sql, (e, r) => {//Succes
-            log(e,r)
+            log(e, r)
             let host = (req.rawHeaders[1])
             const mailOptions = {
                 from: 'divyuzzzzzz@gmail.com',
@@ -278,7 +279,7 @@ function add_user(req, res) {
                 </body>
                 </html>`
             };
-            send_mail(res,mailOptions)
+            send_mail(res, mailOptions)
         })
     }
     else
@@ -288,13 +289,18 @@ function add_user(req, res) {
 //Donate
 function donate(req, res) {
     if (req.method == 'POST') {
-        body = req.body
-        sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
-        con.query(sql, (e, r) => {
+        isLoggedIn(req.cookies, () => {
+            body = req.body
+            sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+            con.query(sql, (e, r) => {
 
-            res.redirect('/donate')
+                res.redirect('/donate')
 
+            })
+        }, () => {
+            res.redirect('/login')
         })
+
     }
     else
         res.render('donate')
@@ -304,11 +310,16 @@ function donate(req, res) {
 function patient(req, res) {
     body = req.body
     if (req.method === 'POST') {
-        sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
-        con.query(sql, (e, r) => {
+        isLoggedIn(req.cookies, () => {
+            sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+            con.query(sql, (e, r) => {
 
-            res.redirect('/donate')
+                res.redirect('/donate')
+            })
+        }, () => {
+            res.redirect('/login')
         })
+
     }
     else
         res.render('patient')//ppo

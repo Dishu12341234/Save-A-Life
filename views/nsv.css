@@ -14,9 +14,22 @@ input[type="checkBox"]
 
 input,select,table
 {
+    transition: all .5s;
     position: relative;
-    left: 8.4vw;
+    left: 8.3vw;
 }
+
+input,select
+{
+    background-color: #bd4565;
+    color: white !important;
+    border: none;
+    margin: 1px;
+    padding: 10px;
+    input-security:auto;
+}
+
+
 
 .navbar
 {
@@ -53,4 +66,37 @@ input,select,table
     background-color: white;
     color: #ad3535;
     padding: 7px;
+}
+
+table
+{
+    width: 91.7dvw;
+    padding: 20px;
+    border: 0;
+    background: #ad3535;
+    color: white;
+}
+
+form
+{
+    border: 1px #ad3535 solid;
+    background-color: #ad3535;
+    display: flex;  
+    color: white;
+}
+
+input::placeholder
+{
+    color: white;
+    border: #ad3535 1px dashed;
+}
+
+input::placeholder
+{
+    transition:all .5s;
+}
+input:hover::placeholder
+{
+    padding: 5px;
+    font-size: 14px;
 }

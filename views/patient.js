@@ -8,7 +8,6 @@ for (i = 17; i < 100;i++)
 }
 const patients = fetch(`${window.location.origin}/get_patients`)
 const table = document.createElement('table')
-table.border= '1'
 patients.then(r=>{
     r.json().then(display)
 })
