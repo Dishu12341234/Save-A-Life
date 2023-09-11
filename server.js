@@ -28,6 +28,12 @@ for (const name of Object.keys(nets)) {
     }
 }
 
+for(let k in results)
+{
+    console.log(results[k][0],'->',k);
+    break;
+}
+
 const app = express()
 
 //Genertaing A random Key

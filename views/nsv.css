@@ -1,0 +1,42 @@
+input[type="checkBox"]
+{
+    display: flex;
+    position: absolute;
+    opacity: .0;
+    top: 0px;
+    left: 94.75dvw;
+    height: 55px;
+    border: none;
+    outline: none;
+    width: 65px;
+    z-index: 100;
+}
+
+input,select
+{
+    position: relative;
+    left: 8.4vw;
+}
+
+.navbar
+{
+    background-color: #ad3535;
+    padding: 3px;
+    width: 8vw;
+    position: absolute;
+    top: 0;
+    height: 98.8vh;
+}
+
+.navbar > ul > li > a{
+    
+    text-decoration: none;
+    color: #FFF;
+}
+.navbar > ul > li > a:hover {
+    margin-left:0px ;
+    color: black;
+}
+.navbar > ul{
+    list-style: none;
+}

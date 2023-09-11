@@ -1,6 +1,7 @@
 const body = document.body
 
 const div_nav = document.createElement("div")
+
 div_nav.className = 'navbar'
 div_nav.id = 'navbar'
 div_nav.style.paddingBottom = '8px'
@@ -22,15 +23,8 @@ for (let i = 0; i < redirects.length; i++) {
     ul.appendChild(li)
 }
 
-
-
+const navE = document.querySelector("nav")
 div_nav.appendChild(ul)
-body.appendChild(div_nav)
-console.log(document.body);
 
-
-const settings = document.createElement("iframe")
-settings.style.border = 0
-const nav = document.getElementById("navbar")
-settings.src = './settings.svg'
-nav.appendChild(settings)
+navE.appendChild(div_nav)
+body.appendChild(navE)
