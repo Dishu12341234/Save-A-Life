@@ -6,3 +6,4 @@ all:
 	git -v | lolcat
 	sleep 1
 	clear
+	NEOFETCH	
