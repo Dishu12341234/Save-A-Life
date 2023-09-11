@@ -29,8 +29,6 @@ for (const name of Object.keys(nets)) {
     }
 }
 
-
-
 const app = express()
 
 //Genertaing A random Key
@@ -338,5 +336,3 @@ function patient(req, res) {
     else
         res.render('patient')//ppo
 }
-
-//6c18034702cc402e0e26439fd6433082519d9a1ab1de7294b0ec2cfe95c763c7
