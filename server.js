@@ -81,22 +81,35 @@ app.get('/', home)
 app.get('/t', verify)
 app.get('/login', login)
 app.get('/fetch', fetch)
-app.get('/rm', removeUser)
 app.post('/login', login)
 app.post('/add', add_user)
 app.get('/donate', donate)
+app.get('/rm', removeUser)
 app.post('/donate', donate)
+app.get('/signUp', add_user)
 app.get('/patient', patient)
 app.get('/signOut', singout)
 app.post('/patient', patient)
-app.get('/signUp', add_user)
 app.get('/get_donor', get_donors)
 app.get('/get_patients', get_patients)
-app.get('/ptlog',(req,res)=>{res.render('postLogin')})
 app.get('/sendLoginStatus', sendLoginStatus)
+app.get('/getUserCredentials',getUserCredentials)
 //Listner
 app.listen(80)
 
+function getUserCredentials(req,res)
+{
+    isLoggedIn(req.cookies,()=>{
+        let UNID = jwt.decode(req.cookies['UNID']);
+        UNID = UNID['UNID']
+        sql = `SELECT * FROM profile WHERE UNID = '${UNID}'`
+        con.query(sql,(e,r)=>{
+            res.json(r)
+        })
+    },()=>{
+        res.redirect('/login')
+    })
+}
 
 function removeUser(req, res) {
     let UNID = req.query.rf

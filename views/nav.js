@@ -1,10 +1,14 @@
 const body = document.body
 
 const div_nav = document.createElement("div")
+const profile = document.createElement("div")
 
 div_nav.className = 'navbar'
 div_nav.id = 'navbar'
 div_nav.style.paddingBottom = '8px'
+
+profile.className = "profile"
+
 const ul = document.createElement("ul")
 
 const redirects =
@@ -27,6 +31,7 @@ for (let i = 0; i < redirects.length; i++) {
 
 const navE = document.querySelector("nav")
 div_nav.appendChild(ul)
+div_nav.appendChild(profile)
 
 navE.appendChild(div_nav)
 body.appendChild(navE)
