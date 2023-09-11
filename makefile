@@ -3,5 +3,6 @@ all:
 	git commit -m 'all' | lolcat
 	git push
 	git -v | lolcat
+	clear
 	sleep 1
 	clear
