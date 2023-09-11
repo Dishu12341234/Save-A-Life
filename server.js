@@ -8,6 +8,25 @@ const { log } = require('console')
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const { networkInterfaces } = require('os')
+
+
+const nets = networkInterfaces();
+const results = Object.create(null); // Or just '{}', an empty object
+
+for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+        // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+        // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
+        const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+        if (net.family === familyV4Value && !net.internal) {
+            if (!results[name]) {
+                results[name] = [];
+            }
+            results[name].push(net.address);
+        }
+    }
+}
 
 const app = express()
 
@@ -40,7 +59,7 @@ app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie:
 
 //MySQL connection
 let con = mysql.createConnection({
-    host: '192.168.1.69',
+    host: results['en5'][0],
     user: 'divyansh',
     password: 'divyansh@mysql'
 });
