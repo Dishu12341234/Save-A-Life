@@ -1,28 +1,27 @@
-body
-{
+body {
     margin: 0%;
 }
 
-input,select,table
-{
+input,
+select,
+table {
     transition: all .5s;
     position: relative;
 }
 
-input,select
-{
+input,
+select {
     background-color: #bd4565;
     color: white !important;
     border: none;
     margin: 1px;
     padding: 10px;
-    input-security:auto;
+    input-security: auto;
 }
 
 
 
-.navbar
-{
+.navbar {
     background-color: #ad3535;
     padding: 3px;
     width: 8vw;
@@ -32,36 +31,35 @@ input,select
     border-right: white 1px solid;
     z-index: 10;
 }
-form > ul{
+
+form>ul {
     list-style: none;
 }
 
-form > ul >li
-{
+form>ul>li {
     position: relative;
     left: -2vw;
     width: 100%;
     margin: 10px;
 }
 
-form > ul > li > a{
+form>ul>li>a {
     text-decoration: none;
     color: #FFF;
-    transition: all ease-out .3s ;
+    transition: all ease-out .3s;
     padding: 2px;
     z-index: 100;
     border-radius: 5px;
 
 }
-form > ul > li > a:hover 
-{
+
+form>ul>li>a:hover {
     background-color: white;
     color: #ad3535;
     padding: 7px;
 }
 
-table
-{
+table {
     width: 100dvw;
     padding: 20px;
     border: 0;
@@ -70,37 +68,32 @@ table
 }
 
 
-.float
-{
+.float {
     width: 50vw;
     height: 50vh;
     background: #ad3535;
     border-radius: 10px;
 }
 
-nav
-{
-    position: absolute;
+nav {
+    position: fixed;
     display: none;
     z-index: 10000;
-    border: 3px solid beige;
-    border-top:0;
+    border: 3px solid #2e2e2e;
     border-radius: 10px;
-    border-top-right-radius: 0px;
-    border-top-left-radius: 0px;
+
     margin-top: 0;
+    left: 25vw;
 }
 
-#navUl
-{
+#navUl {
     list-style: none;
     color: white;
     padding: 10px;
     margin-top: 0;
 }
 
-#navLi
-{
+#navLi {
     transition: .5s ease-out all;
     width: max-content;
     height: 30px;
@@ -108,27 +101,32 @@ nav
     border-radius: 5px;
 }
 
-#navLi:hover
+#navLi > a
 {
+    padding: 10px;
+    border-radius: 5px;
+    transition: .5s ease-out all;
+    text-decoration: none;
+    color: white;
+}
+
+#navLi:hover > a{
     background-color: white;
     color: #bd4565;
     border-radius: 10px;
 }
 
-#navLi:active
-{
+#navLi:active {
     background-color: #ad3535;
     color: white;
 }
 
-hr
-{
+hr {
     border-top: 2px white solid;
     border-radius: 10px;
 }
 
-header
-{
+header {
     height: 100px;
     width: 100dvw;
     background-color: #ad3535;
@@ -136,13 +134,44 @@ header
     text-align: center;
 }
 
-h1
-{
+h1 {
     margin-top: 0;
+    display: inline;
     color: white;
 }
 
-iframe
+#settings-cbx {
+    display: flex;
+}
+
+iframe {
+    all: unset  ;
+    position: absolute;
+    left: 0;
+    height: 100px;
+    width: 100px;
+    border-radius: 0;
+    outline: 0;
+}
+
+#settings-cbx {
+    position: absolute;
+    left: 6px;
+    top: 5px;
+    height: 50px;
+    width: 50px;
+    opacity: 0;
+}
+
+
+input::placeholder
 {
-     
+    color: white;
+    transition: .2s all;
+}
+
+input:hover::placeholder
+{
+    padding: 3px;
+    font-size: 15px;
 }

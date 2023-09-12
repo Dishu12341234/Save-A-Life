@@ -6,36 +6,38 @@ html(lang="en")
         title Patient | Save A Life
         link(rel="stylesheet", href="patient.css")
         script(src="nav.js",defer) 
-        link(rel="stylesheet", href="nsv.css")
         script(src="patient.js",defer) 
+        link(rel="stylesheet", href="nsv.css")
     body 
-    nav 
-    form(action="/patient", method="post") 
-            input(type="text", name="UNID",placeholder="Enter your UNID" ,required)
-            br
-            select(name="blood_group")  
-                option(value="AB+")
-                    p   AB+
-                option(value="AB-")
-                    p   AB-
-                option(value="B+")
-                    p   B+
-                option(value="B-")
-                    p   B-
-                option(value="A+")
-                    p   A+
-                option(value="A-")
-                    p   A-
-                option(value="O+")
-                    p   O+
-                option(value="O-",selecte)
-                    p   O-
-                option(value="RH-NULL")  
-                    p   RH-NULL
-            select(name="age",id="age") 
-            select(name="gender")
-                option(value="male")
-                   p    male
-                option(value="female")
-                   p    female
-            input(type="submit", value="submit")
+        header 
+            h1 patients | Save A Life
+        nav         
+        form(action="/patient", method="post") 
+                input(type="text", name="UNID",placeholder="Enter your UNID" ,required)
+                br
+                select(name="blood_group")  
+                    option(value="AB+")
+                        p   AB+
+                    option(value="AB-")
+                        p   AB-
+                    option(value="B+")
+                        p   B+
+                    option(value="B-")
+                        p   B-
+                    option(value="A+")
+                        p   A+
+                    option(value="A-")
+                        p   A-
+                    option(value="O+")
+                        p   O+
+                    option(value="O-",selecte)
+                        p   O-
+                    option(value="RH-NULL")  
+                        p   RH-NULL
+                select(name="age",id="age") 
+                select(name="gender")
+                    option(value="male")
+                        p    male
+                    option(value="female")
+                        p    female
+                input(type="submit", value="submit")

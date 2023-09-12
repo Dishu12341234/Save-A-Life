@@ -21,12 +21,24 @@ const nav = document.querySelector("nav")
         </div>
 `
 
-const header = document.createElement("header")
-header.innerHTML = 
+const header = document.querySelector("header")
+header.innerHTML += 
 `
-    <h1>
-        Home | Save A Life
-    </h1>           
-    <iframe src='settings.svg'></iframe>
+    <iframe src='settings.svg' id='settings-frame'>
+    </iframe>
+    <input type='checkbox' id='settings-cbx'/>
 `
-document.body.appendChild(header)
+
+const iframe = document.getElementById('settings-frame')
+const cbx = document.getElementById('settings-cbx')
+
+cbx.addEventListener("click",e=>{
+    nav.style.display === 'block' ? nav.style.display = 'none' : nav.style.display = 'block';
+})
+
+document.addEventListener("keydown",e=>{
+    if(e.code === 'Escape')
+    {
+        nav.style.display = 'none'
+    }
+})

@@ -1,5 +1,6 @@
 -- Active: 1693716310421@@127.0.0.1@3306@SAL
 
+
 USE SAL;
 CREATE TABLE patient
 (   
