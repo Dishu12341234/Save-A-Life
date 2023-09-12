@@ -46,37 +46,18 @@ for (let i = 0; i < redirects.length; i++) {
         drawer_div_ckeckBox.type = 'checkBox'
         drawer_div_ul_li.innerText = a.innerText
 
-        const city = document.createElement("input")
-        const name = document.createElement("input")
-        const contact = document.createElement("input")
-        const email = document.createElement("input")
         const submit = document.createElement("input")
         const form = document.createElement("form")
 
         form.action = "/signUp"
-        form.method = "POST"
-
-        city.type = 'text'
-        name.type = 'text'
-        email.type = 'text'
-        contact.type = 'text'
+        form.method = "GET"
+        submit.id = 'submit'
         submit.type = 'submit'
+        submit.value = 'SignUp'
 
-        submit.value = 'Submit'
-        city.placeholder = 'Enter your city'
-        name.placeholder = 'Enter your name'
-        contact.placeholder = 'Enter your contact'
-        email.placeholder = 'Enter your contact'
+        form.appendChild(submit)
 
-        drawer_div_ul_li.appendChild(city)
-        drawer_div_ul_li.appendChild(name)
-        drawer_div_ul_li.appendChild(contact)
-        drawer_div_ul_li.appendChild(email)
-        drawer_div_ul_li.appendChild(submit)
-
-        drawer_div_ul.appendChild(drawer_div_ul_li)
-
-        drawer_div.appendChild(drawer_div_ul)
+        drawer_div.appendChild(form)
 
         div_nav.appendChild(drawer_div)
     }
