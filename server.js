@@ -62,7 +62,7 @@ app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie:
 
 for (let k in results) {
     var con = mysql.createConnection({
-        host: results[k][0],
+        host: 'localhost',
         user: 'divyansh',
         password: 'divyansh@mysql'
     });
