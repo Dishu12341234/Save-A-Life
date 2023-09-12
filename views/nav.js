@@ -1,80 +1,32 @@
-const body = document.body
+const nav = document.querySelector("nav")
+ nav.innerHTML = 
+`
+ <div class="float">
+            <ul id="navUl">
+                <center>
 
-const drawer_div = document.createElement("div")
-const drawer_div_ul = document.createElement("ul")
-const div_nav = document.createElement("div")
-const profile = document.createElement("div")
-const drawer_div_ckeckBox = document.createElement("input")
+                    <li id="navLi"><a href='/'>Home</a></li>
+                    <hr>
+                    <li id="navLi"><a href='signUp'>SignUp</a></li>
+                    <hr>
+                    <li id="navLi"><a href='signOut'>SignOut</a></li>
+                    <hr>
+                    <li id="navLi"><a href='login'>Login</a></li>
+                    <hr>
+                    <li id="navLi"><a href='donate'>Donate  </a></li>
+                    <hr>
+                    <li id="navLi"><a href='patient'>Patient</a></li>
+            </center>
+            </ul>
+        </div>
+`
 
-drawer_div.className = 'drawer'
-div_nav.className = 'navbar'
-div_nav.id = 'navbar'
-
-
-div_nav.style.paddingBottom = '8px'
-
-profile.className = "profile"
-
-const ul = document.createElement("ul")
-
-const redirects =
-    ['Home', 'SignUp', 'Login', 'SignOut', 'Donate', 'Patient']
-
-for (let i = 0; i < redirects.length; i++) {
-    let hr = document.createElement("hr")
-    let li = document.createElement("li")
-    let a = document.createElement("a")
-
-    a.innerText = redirects[i]
-
-    if (!( a.innerText == 'SignOut')) {
-        console.log(a.innerText);
-
-        if (a.innerText != 'Home')
-            a.href = a.innerText.toLocaleLowerCase()
-        else {
-            a.href = '/ '
-        }
-        li.appendChild(a)
-        li.appendChild(hr)
-        ul.appendChild(li)
-    }
-    else
-    {
-        let drawer_div_ul_li = document.createElement("li")
-
-        drawer_div_ckeckBox.type = 'checkBox'
-        drawer_div_ul_li.innerText = a.innerText
-
-        const submit = document.createElement("input")
-        const form = document.createElement("form")
-
-        form.action = "/signUp"
-        form.method = "GET"
-        submit.id = 'submit'
-        submit.type = 'submit'
-        submit.value = 'SignUp'
-
-        form.appendChild(submit)
-
-        drawer_div.appendChild(form)
-
-        div_nav.appendChild(drawer_div)
-    }
-}
-
-div_nav.appendChild(drawer_div_ckeckBox)
-
-const navE = document.querySelector("nav")
-div_nav.appendChild(ul)
-div_nav.appendChild(profile)
-
-navE.appendChild(div_nav)
-body.appendChild(navE)
-
-drawer_div_ckeckBox.addEventListener("click",e=>{
-    drawer_div.id == 'float' ? drawer_div.id = '' : drawer_div.id = 'float'
-})
-//ip -> 167.235.251.13
-//port -> 22
-//xx
+const header = document.createElement("header")
+header.innerHTML = 
+`
+    <h1>
+        Home | Save A Life
+    </h1>           
+    <iframe src='settings.svg'></iframe>
+`
+document.body.appendChild(header)

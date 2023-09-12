@@ -92,7 +92,7 @@ app.get('/get_patients', get_patients)
 app.get('/sendLoginStatus', sendLoginStatus)
 app.get('/getUserCredentials', getUserCredentials)
 //Listner
-app.listen(80)
+app.listen(2000)
 
 function getUserCredentials(req, res) {
     isLoggedIn(req.cookies, () => {
