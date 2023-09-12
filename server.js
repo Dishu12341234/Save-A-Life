@@ -58,11 +58,9 @@ app.use(express.static('views'))
 app.use(bodyParser.urlencoded({ extended: true, }),);
 app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie: { maxAge: 1000 * 60 * 60 * 3 }, resave: false }))
 
-
-
 for (let k in results) {
     var con = mysql.createConnection({
-        host: 'localhost',
+        host: results[k][0],
         user: 'divyansh',
         password: 'divyansh@mysql'
     });
@@ -92,20 +90,19 @@ app.post('/patient', patient)
 app.get('/get_donor', get_donors)
 app.get('/get_patients', get_patients)
 app.get('/sendLoginStatus', sendLoginStatus)
-app.get('/getUserCredentials',getUserCredentials)
+app.get('/getUserCredentials', getUserCredentials)
 //Listner
 app.listen(80)
 
-function getUserCredentials(req,res)
-{
-    isLoggedIn(req.cookies,()=>{
+function getUserCredentials(req, res) {
+    isLoggedIn(req.cookies, () => {
         let UNID = jwt.decode(req.cookies['UNID']);
         UNID = UNID['UNID']
         sql = `SELECT * FROM profile WHERE UNID = '${UNID}'`
-        con.query(sql,(e,r)=>{
+        con.query(sql, (e, r) => {
             res.json(r)
         })
-    },()=>{
+    }, () => {
         res.redirect('/login')
     })
 }

@@ -126,10 +126,16 @@ input[type="checkBox"]
 #float
 {
     position: absolute;
-    top: 50vh;
+    top: 20vh;
     width: 30vw;
     left: 35vw;
-    height: 30vh;
+    height: 50vh;
     border-radius: 10px;
     background: #ad3535;
 }
+
+#float > ul,#float > ul > li > input
+{
+    display: block;
+}
+
