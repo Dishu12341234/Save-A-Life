@@ -9,7 +9,8 @@ const notifier = require('node-notifier');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const { networkInterfaces } = require('os')
+const { networkInterfaces } = require('os');
+const { findSourceMap } = require('module');
 
 
 const nets = networkInterfaces();
@@ -28,6 +29,18 @@ for (const name of Object.keys(nets)) {
         }
     }
 }
+
+function getProfile(req,res)
+{
+    isLoggedIn(req.cookies)
+}
+
+function sanitizeQuery(inputQuery) {
+    // Remove potentially harmful characters or SQL keywords
+    const sanitizedQuery = inputQuery.replace(/["'`;()<>]/g, '');
+  
+    return sanitizedQuery;
+  }
 
 const app = express()
 
@@ -70,7 +83,7 @@ for (let k in results) {
 con.connect(function (err) {
     if (err) throw err;
     console.log('Connected!');
-    con.query('USE SAL;');
+    con.query('USE admin_divyansh;');
 });
 
 //End Points
@@ -91,14 +104,14 @@ app.get('/get_donor', get_donors)
 app.get('/get_patients', get_patients)
 app.get('/sendLoginStatus', sendLoginStatus)
 app.get('/getUserCredentials', getUserCredentials)
-//Listner
+//Listner   
 app.listen(80)
 
 function getUserCredentials(req, res) {
     isLoggedIn(req.cookies, () => {
         let UNID = jwt.decode(req.cookies['UNID']);
         UNID = UNID['UNID']
-        sql = `SELECT * FROM profile WHERE UNID = '${UNID}'`
+        sql = sanitizeQuery(`SELECT * FROM profile WHERE UNID = '${UNID}'`)
         con.query(sql, (e, r) => {
             res.json(r)
         })
@@ -109,7 +122,8 @@ function getUserCredentials(req, res) {
 
 function removeUser(req, res) {
     let UNID = req.query.rf
-    sql = `DELETE FROM profile WHERE UNID = '${UNID}'`
+    sql = sanitizeQuery(`DELETE FROM profile WHERE UNID = '${UNID}'`)
+
     con.query(sql, (e, r) => { log(e, r) })
     res.render('index')
 
@@ -142,7 +156,7 @@ function send_mail(res, mailOptions, token = null) {
 
 //Get the donor list
 function get_donors(req, res) {
-    con.query('SELECT * FROM donor   INNER JOIN profile ON donor.UNID = profile.UNID', (e, r) => {
+    con.query(sanitizeQuery('SELECT * FROM donor   INNER JOIN profile ON donor.UNID = profile.UNID'), (e, r) => {
         res.json(r)
     })
 }
@@ -155,7 +169,7 @@ function verify(req, res) {
         res.cookie('UNID', token)
         res.clearCookie('token')
 
-        con.query(`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`, (e, r) => {
+        con.query(sanitizeQuery(`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`), (e, r) => {
 
         })
     }
@@ -163,7 +177,7 @@ function verify(req, res) {
 }
 
 function get_patients(req, res) {
-    con.query('SELECT * FROM patient INNER JOIN profile ON patient.UNID = profile.UNID', (e, r) => {
+    con.query(sanitizeQuery('SELECT * FROM patient INNER JOIN profile ON patient.UNID = profile.UNID'), (e, r) => {
 
         res.json(r)
     })
@@ -173,7 +187,7 @@ function get_patients(req, res) {
 function fetch(req, res) {
     try {
         const UNID = jwt.decode(req.cookies['UNID'])['UNID']
-        con.query(`SELECT * FROM profile WHERE UNID = '${UNID}' `, (e, r) => {
+        con.query(sanitizeQuery(`SELECT * FROM profile WHERE UNID = '${UNID}' `), (e, r) => {
 
             res.redirect('/')
         })
@@ -190,7 +204,7 @@ function isLoggedIn(PUNID, cb = function () { }, scb = function () { }) {//Param
 
         let UNID = jwt.decode(PUNID['UNID']);
         UNID = UNID['UNID']
-        let sql = `SELECT login FROM profile WHERE UNID = '${UNID}'`
+        let sql = sanitizeQuery(`SELECT login FROM profile WHERE UNID = '${UNID}'`)
         con.query(sql, (e, r) => {
             login = r[0]['login']
             if (login)
@@ -254,7 +268,7 @@ function singout(req, res) {
 
 //Home
 function home(req, res) {
-    con.query('SELECT * FROM profile`;', (e, r) => {
+    con.query('SELECT * FROM profile;', (e, r) => {
         res.render('index')
     })
 }
@@ -264,7 +278,7 @@ function add_user(req, res) {
     if (req.method == 'POST') {
         let body = req.body
         let unid = generateSecureId(4)
-        let sql = `INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}','${Date().toLocaleUpperCase()}');`
+        let sql = sanitizeQuery(`INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}','${Date().toLocaleUpperCase()}');`)
         con.query(sql, (e, r) => {//Succes
             log(e, r)
             let host = (req.rawHeaders[1])
@@ -300,7 +314,7 @@ function donate(req, res) {
     if (req.method == 'POST') {
         isLoggedIn(req.cookies, () => {
             body = req.body
-            sql = `INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+            sql = sanitizeQuery(`INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`)
             con.query(sql, (e, r) => {
 
                 res.redirect('/donate')
@@ -320,7 +334,7 @@ function patient(req, res) {
     body = req.body
     if (req.method === 'POST') {
         isLoggedIn(req.cookies, () => {
-            sql = `INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`
+            sql = sanitizeQuery(`INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`)
             con.query(sql, (e, r) => {
 
                 res.redirect('/donate')

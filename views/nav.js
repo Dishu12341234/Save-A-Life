@@ -31,6 +31,7 @@ nav.innerHTML =
                     </iframe>
                     <input type='checkbox' id='settings-cbx'/></li>
                     <hr>
+                    <p id='badal-barsa-bijuli'></p>
             </center>
             </ul>
         </div>
@@ -66,3 +67,5 @@ signOut_cbx.addEventListener("click",e=>{
     window.location.href = '/signOut'
     console.log('ufhei');
 })
+
+fetch(`${window.location.origin}/get`)
