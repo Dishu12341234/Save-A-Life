@@ -93,7 +93,7 @@ nav {
     margin-top: 0;
 }
 
-#navLi {
+.navLi {
     transition: .5s ease-out all;
     width: max-content;
     height: 30px;
@@ -101,7 +101,7 @@ nav {
     border-radius: 5px;
 }
 
-#navLi > a
+.navLi > a
 {
     padding: 10px;
     border-radius: 5px;
@@ -110,13 +110,13 @@ nav {
     color: white;
 }
 
-#navLi:hover > a{
+.navLi:hover > a{
     background-color: white;
     color: #bd4565;
     border-radius: 10px;
 }
 
-#navLi:active {
+.navLi:active {
     background-color: #ad3535;
     color: white;
 }
@@ -188,3 +188,8 @@ input:hover::placeholder
     left: 98vw;
 }
 
+.navLi > iframe
+{
+    position: absolute;
+    left: 27vw;
+}

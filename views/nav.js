@@ -5,29 +5,29 @@ nav.innerHTML =
             <ul id="navUl">
                 <center>
 
-                    <li id="navLi"><a href='/'>Home</a>
+                    <li class="navLi"><a href='/'>Home</a>
                     <iframe src='Hicon/Linear/Home 4.svg' id='settings-frame'>
     </iframe>
     <input type='checkbox' id='settings-cbx'/>
                     </li>
                     <hr>
-                    <li id="navLi"><a href='signUp'>SignUp</a><iframe src='Hicon/Linear/Foreign.svg' id='settings-frame'>
+                    <li class="navLi"><a href='signUp'>SignUp</a><iframe src='Hicon/Linear/Foreign.svg' id='settings-frame'>
                     </iframe>
                     <input type='checkbox' id='settings-cbx'/></li>
                     <hr>
-                    <li id="navLi"><a href='signOut'>SignOut</a><iframe src='Hicon/Linear/Logout.svg' id='settings-frame'>
+                    <li class="navLi"><a href='signOut'>SignOut</a><iframe src='Hicon/Linear/Logout.svg' id='settings-frame'>
                     </iframe>
                     <input type='checkbox' id='settings-cbx'/></li>
                     <hr>
-                    <li id="navLi"><a href='login'>Login</a><iframe src='Hicon/Linear/Link.svg' id='settings-frame'>
+                    <li class="navLi"><a href='login'>Login</a><iframe src='Hicon/Linear/Link.svg' id='settings-frame'>
                     </iframe>
                     <input type='checkbox' id='settings-cbx'/></li>
                     <hr>
-                    <li id="navLi"><a href='donate'>Donate  </a><iframe src='Hicon/Linear/Award 6.svg' id='settings-frame'>
+                    <li class="navLi"><a href='donate'>Donate  </a><iframe src='Hicon/Linear/Award 6.svg' id='settings-frame'>
                     </iframe>
                     <input type='checkbox' id='settings-cbx'/></li>
                     <hr>
-                    <li id="navLi"><a href='patient'>Patient</a><iframe src='Hicon/Linear/Award 6.svg' id='settings-frame'>
+                    <li class="navLi"><a href='patient'>Patient</a><iframe src='Hicon/Linear/Award 6.svg' id='settings-frame'>
                     </iframe>
                     <input type='checkbox' id='settings-cbx'/></li>
                     <hr>
