@@ -156,10 +156,9 @@ iframe {
 
 #settings-cbx {
     position: absolute;
-    left: 6px;
-    top: 5px;
-    height: 50px;
-    width: 50px;
+    top: 0;
+    height: 30px;
+    width: 30px;
     opacity: 0;
 }
 
@@ -175,3 +174,17 @@ input:hover::placeholder
     padding: 3px;
     font-size: 15px;
 }
+
+#settings-signOut
+{
+    height: 30px;
+    width: 30px;
+    opacity: 0;
+}
+
+.signOut
+{
+    position: absolute;
+    left: 98vw;
+}
+
