@@ -74,8 +74,8 @@ app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie:
 for (let k in results) {
     var con = mysql.createConnection({
         host: results[k][0],
-        user: 'divyansh_admin',
-        password: 'divyansh'
+        user: 'divyansh',
+        password: 'divyansh@mysql'
     });
     log(results[k][0] + ' ------> ' + k)
     break;
