@@ -35,13 +35,6 @@ function getProfile(req,res)
     isLoggedIn(req.cookies)
 }
 
-function sanitizeQuery(inputQuery) {
-    // Remove potentially harmful characters or SQL keywords
-    const sanitizedQuery = inputQuery.replace(/["'`;()<>]/g, '');
-  
-    return sanitizedQuery;
-  }
-
 const app = express()
 
 //Genertaing A random Key
@@ -111,18 +104,18 @@ function getUserCredentials(req, res) {
     isLoggedIn(req.cookies, () => {
         let UNID = jwt.decode(req.cookies['UNID']);
         UNID = UNID['UNID']
-        sql = sanitizeQuery(`SELECT * FROM profile WHERE UNID = '${UNID}'`)
+        sql = (`SELECT * FROM profile WHERE UNID = '${UNID}'`)
         con.query(sql, (e, r) => {
             res.json(r)
         })
     }, () => {
-        res.json({})
+        res.json([{login:false}])
     })
 }
 
 function removeUser(req, res) {
     let UNID = req.query.rf
-    sql = sanitizeQuery(`DELETE FROM profile WHERE UNID = '${UNID}'`)
+    sql = (`DELETE FROM profile WHERE UNID = '${UNID}'`)
 
     con.query(sql, (e, r) => { log(e, r) })
     res.render('index')
@@ -156,7 +149,7 @@ function send_mail(res, mailOptions, token = null) {
 
 //Get the donor list
 function get_donors(req, res) {
-    con.query(sanitizeQuery('SELECT * FROM donor   INNER JOIN profile ON donor.UNID = profile.UNID'), (e, r) => {
+    con.query(('SELECT * FROM donor INNER JOIN profile ON donor.UNID = profile.UNID'), (e, r) => {
         res.json(r)
     })
 }
@@ -169,7 +162,7 @@ function verify(req, res) {
         res.cookie('UNID', token)
         res.clearCookie('token')
 
-        con.query(sanitizeQuery(`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`), (e, r) => {
+        con.query((`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`), (e, r) => {
 
         })
     }
@@ -177,7 +170,7 @@ function verify(req, res) {
 }
 
 function get_patients(req, res) {
-    con.query(sanitizeQuery('SELECT * FROM patient INNER JOIN profile ON patient.UNID = profile.UNID'), (e, r) => {
+    con.query(('SELECT * FROM patient INNER JOIN profile ON patient.UNID = profile.UNID'), (e, r) => {
 
         res.json(r)
     })
@@ -187,7 +180,7 @@ function get_patients(req, res) {
 function fetch(req, res) {
     try {
         const UNID = jwt.decode(req.cookies['UNID'])['UNID']
-        con.query(sanitizeQuery(`SELECT * FROM profile WHERE UNID = '${UNID}' `), (e, r) => {
+        con.query((`SELECT * FROM profile WHERE UNID = '${UNID}' `), (e, r) => {
 
             res.redirect('/')
         })
@@ -204,7 +197,7 @@ function isLoggedIn(PUNID, cb = function () { }, scb = function () { }) {//Param
 
         let UNID = jwt.decode(PUNID['UNID']);
         UNID = UNID['UNID']
-        let sql = sanitizeQuery(`SELECT login FROM profile WHERE UNID = '${UNID}'`)
+        let sql = (`SELECT login FROM profile WHERE UNID = '${UNID}'`)
         con.query(sql, (e, r) => {
             login = r[0]['login']
             if (login)
@@ -278,7 +271,7 @@ function add_user(req, res) {
     if (req.method == 'POST') {
         let body = req.body
         let unid = generateSecureId(4)
-        let sql = sanitizeQuery(`INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}','${Date().toLocaleUpperCase()}');`)
+        let sql = (`INSERT INTO profile VALUES('${body.name}' , '${body.city}','${body.contact}' , '${unid}','false','${body.email}','${Date().toLocaleUpperCase()}');`)
         con.query(sql, (e, r) => {//Succes
             log(e, r)
             let host = (req.rawHeaders[1])
@@ -314,7 +307,7 @@ function donate(req, res) {
     if (req.method == 'POST') {
         isLoggedIn(req.cookies, () => {
             body = req.body
-            sql = sanitizeQuery(`INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}','${body.organ}')`)
+            sql = (`INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}','${body.organ}')`)
             con.query(sql, (e, r) => {
 
                 res.redirect('/donate')
@@ -334,7 +327,7 @@ function patient(req, res) {
     body = req.body
     if (req.method === 'POST') {
         isLoggedIn(req.cookies, () => {
-            sql = sanitizeQuery(`INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}','${body.organ}')`)
+            sql = (`INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}','${body.organ}')`)
             con.query(sql, (e, r) => {
 
                 res.redirect('/donate')

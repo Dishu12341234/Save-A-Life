@@ -193,3 +193,15 @@ input:hover::placeholder
     position: absolute;
     left: 27vw;
 }
+
+#creds{
+    color: white;
+}
+
+#sendBack
+{
+    font-size: x-large;
+}
+#sendBack>p>a{
+color: black;
+}
