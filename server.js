@@ -155,16 +155,13 @@ function get_donors(req, res) {
 }
 
 
-function verify(req, res) {
-    if (req.query.token === req.cookies.token && req.query.token != undefined) // The user is now logged in
+function verify(req, res,signUp=false) {
+    if ((req.query.token === req.cookies.token && req.query.token != undefined) || signUp) // The user is now logged in
     {
-        const token = jwt.sign({ UNID: req.query.UNID }, generateSecureId(32))
-        res.cookie('UNID', token)
-        res.clearCookie('token')
-
-        con.query((`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`), (e, r) => {
-
-        })
+            const token = jwt.sign({ UNID: req.query.UNID }, generateSecureId(32))
+            res.cookie('UNID', token)
+            res.clearCookie('token')
+        con.query((`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`))
     }
     res.redirect('/fetch')
 }
