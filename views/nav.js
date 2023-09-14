@@ -68,4 +68,3 @@ signOut_cbx.addEventListener("click",e=>{
     console.log('ufhei');
 })
 
-fetch(`${window.location.origin}/get`)

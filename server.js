@@ -74,7 +74,7 @@ app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie:
 for (let k in results) {
     var con = mysql.createConnection({
         host: results[k][0],
-        user: 'divyansh',
+        user: 'divyansh',   
         password: 'divyansh@mysql'
     });
     log(results[k][0] + ' ------> ' + k)
@@ -83,7 +83,7 @@ for (let k in results) {
 con.connect(function (err) {
     if (err) throw err;
     console.log('Connected!');
-    con.query('USE admin_divyansh;');
+    con.query('USE SAL;');
 });
 
 //End Points
@@ -116,7 +116,7 @@ function getUserCredentials(req, res) {
             res.json(r)
         })
     }, () => {
-        res.redirect('/login')
+        res.json({})
     })
 }
 
@@ -314,7 +314,7 @@ function donate(req, res) {
     if (req.method == 'POST') {
         isLoggedIn(req.cookies, () => {
             body = req.body
-            sql = sanitizeQuery(`INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`)
+            sql = sanitizeQuery(`INSERT INTO donor VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}','${body.organ}')`)
             con.query(sql, (e, r) => {
 
                 res.redirect('/donate')
@@ -334,7 +334,7 @@ function patient(req, res) {
     body = req.body
     if (req.method === 'POST') {
         isLoggedIn(req.cookies, () => {
-            sql = sanitizeQuery(`INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}')`)
+            sql = sanitizeQuery(`INSERT INTO patient VALUES('${body.UNID}','${body.blood_group}','${body.age}','${body.gender}','${body.organ}')`)
             con.query(sql, (e, r) => {
 
                 res.redirect('/donate')
