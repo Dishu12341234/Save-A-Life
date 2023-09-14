@@ -64,11 +64,11 @@ app.use(express.static('views'))
 app.use(bodyParser.urlencoded({ extended: true, }),);
 app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie: { maxAge: 1000 * 60 * 60 * 3 }, resave: false }))
 
-for (let k in results) {
+for (let k in results) {``
     var con = mysql.createConnection({
         host: results[k][0],
-        user: 'divyansh',   
-        password: 'divyansh@mysql'
+        user: 'admin_divyansh',   
+        password: 'divyansh'
     });
     log(results[k][0] + ' ------> ' + k)
     break;

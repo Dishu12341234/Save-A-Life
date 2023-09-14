@@ -1,54 +1,12 @@
 const nav = document.querySelector("nav")
 nav.innerHTML =
-    `
- <div class="float">
-            <ul id="navUl">
-                <center>
-
-                    <li class="navLi"><a href='/'>Home</a>
-                    <iframe src='Hicon/Linear/Home 4.svg' id='settings-frame'>
-    </iframe>
-    <input type='checkbox' id='settings-cbx'/>
-                <div id='nav-container'>
-                </li>
-                <hr class='stat'>
-                <li class="navLi stat"><a href='signUp'>SignUp</a><iframe src='Hicon/Linear/Foreign.svg' id='settings-frame'>
-                </iframe>
-                <input type='checkbox' id='settings-cbx'/></li>
-                <hr>
-                <li class="navLi" id='out'><a href='signOut'>SignOut</a><iframe src='Hicon/Linear/Logout.svg' id='settings-frame'>
-                </iframe>
-                <input type='checkbox' id='settings-cbx'/></li>
-                <hr class='stat'>
-                <li class="navLi stat"><a href='login'>Login</a><iframe src='Hicon/Linear/Link.svg' id='settings-frame'>
-                </iframe>
-                <input type='checkbox' id='settings-cbx'/></li>
-                <hr>
-                <li class="navLi"><a href='donate'>Donate  </a><iframe src='Hicon/Linear/Award 6.svg' id='settings-frame'>
-                </iframe>
-                <input type='checkbox' id='settings-cbx'/></li>
-                <hr>
-                <li class="navLi"><a href='patient'>Patient</a><iframe src='Hicon/Linear/Award 6.svg' id='settings-frame'>
-                </iframe>
-                <input type='checkbox' id='settings-cbx'/></li>
-                <hr>
-                <p id='badal-barsa-bijuli'></p>
-                </center>
-                </div>
-            </ul>
-        </div>
+`
+<h1>Home | Save A Life</h1>
 `
 
 const header = document.querySelector("header")
 header.innerHTML +=
-    `
-    <iframe src='Hicon/Linear/Profile Circle.svg' id='settings-frame'>
-    </iframe>
-    <p id='creds'></p>
-    <input type='checkbox' id='settings-cbx'/>
-    <iframe src='Hicon/Linear/Logout.svg' id='settings-signOut-frame' class='signOut' >
-    </iframe>
-    <input type='checkbox' id='settings-signOut' class='signOut' />
+`
 `
 
 const iframe = document.getElementById('settings-frame')
