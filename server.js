@@ -64,11 +64,11 @@ app.use(express.static('views'))
 app.use(bodyParser.urlencoded({ extended: true, }),);
 app.use(session({ secret: generateSecureId(64), saveUninitialized: true, cookie: { maxAge: 1000 * 60 * 60 * 3 }, resave: false }))
 
-for (let k in results) {``
+for (let k in results) {
     var con = mysql.createConnection({
         host: results[k][0],
-        user: 'admin_divyansh',   
-        password: 'divyansh'
+        user: 'divyansh',   
+        password: 'divyansh@mysql'
     });
     log(results[k][0] + ' ------> ' + k)
     break;
@@ -155,13 +155,16 @@ function get_donors(req, res) {
 }
 
 
-function verify(req, res,signUp=false) {
-    if ((req.query.token === req.cookies.token && req.query.token != undefined) || signUp) // The user is now logged in
+function verify(req, res) {
+    if (req.query.token === req.cookies.token && req.query.token != undefined) // The user is now logged in
     {
-            const token = jwt.sign({ UNID: req.query.UNID }, generateSecureId(32))
-            res.cookie('UNID', token)
-            res.clearCookie('token')
-        con.query((`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`))
+        const token = jwt.sign({ UNID: req.query.UNID }, generateSecureId(32))
+        res.cookie('UNID', token)
+        res.clearCookie('token')
+
+        con.query((`UPDATE profile SET login='true' WHERE UNID = '${req.query.UNID}'`), (e, r) => {
+
+        })
     }
     res.redirect('/fetch')
 }
