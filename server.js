@@ -323,7 +323,7 @@ function donate(req, res) {
 }
 
 //Patient
-function patient(req, res) {
+    function patient(req, res) {
     body = req.body
     if (req.method === 'POST') {
         isLoggedIn(req.cookies, () => {
